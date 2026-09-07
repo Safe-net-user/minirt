@@ -62,6 +62,9 @@ else ifeq ($(COMPILER),gcc)
 	CFLAGS		= 	-Wall -Werror -Wextra -Wvla -Wpedantic -Wmisleading-indentation -Wshadow -Wnull-dereference -Wstringop-overflow -Warray-bounds -Wrestrict
 endif
 
+ifeq ($(filter debug debug_memory release,$(MODE)),)
+	$(error Invalid MODE: $(MODE))
+endif
 ifeq ($(MODE),debug)
 	CFLAGS += -g -O1
 else ifeq ($(MODE),debug_memory)
@@ -71,7 +74,7 @@ else ifeq ($(MODE),release)
 endif
 
 CPPFLAGS		:= -I$(LIB)/$(LIBFT)/include -I$(LIB)/$(LIBMLX)
-LDFLAGS			:= -L/$(LIB)/$(LIBFT)/$(LFT) -L/$(LIB)/$(LIBMLX)/$(LMLX)
+LDFLAGS			:= -L/$(LIB)/$(LIBFT) -L/$(LIB)/$(LIBMLX)
 LDLIBS			:= -lm -lft -lmlx -lXext -lX11
 
 # --------------------- FILES --------------------- #
@@ -91,11 +94,11 @@ $(NAME): $(LIBFT) $(MLX) $(OBJECTS)
 
 $(OBJ)/%.o: $(SRC)/%.c
 	$(MKDIRP) $(dir $@)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $< -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) $< -o $@
 
 $(ASM)/%.s: $(SRC)/%.c
 	$(MKDIRP) $(dir $@)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $(LDLIBS) -S $< -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) -S $< -o $@
 
 clean:
 	$(RMRF) $(OBJ)

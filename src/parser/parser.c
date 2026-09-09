@@ -3,21 +3,37 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-int	parser_fsm(char *fb)
+static void	init_lut(t_state_parser_fn *lut)
 {
-	t_parser			*p;
-	t_state_parser_fn	lut;
+	lut[NORMAL] = parser_normal;
+	lut[AMBIENT_LIGHTNING] = parser_amb_light;
+	lut[CAMERA] = parser_cam;
+	lut[LIGHT] = parser_light;
+	lut[SPHERE] = parser_sphere;
+	lut[PLANE] = parser_plane;
+	lut[CYLINDER] = parser_cylinder;
+}
+
+static void	init_parser(t_parser *p, char *str)
+{
+	p->str = str;
+	p->index = 0;
+	p->state = NORMAL;
+}
+
+static int	parser_fsm(char *fb)
+{
+	t_parser			p;
+	t_state_parser_fn	lut[256];
 	int					ret_val;
 
 	init_lut(&lut);
-	if (init_parser(fb))
-		return (1);
+	init_parser(&p, fb);
 	while (fb[p->index] && !ret_val)
 	{
-		ret_val = lut[fb[p->index]](p);
+		ret_val = lut[p->state](&p);
 		p->index++;
 	}
-	free(p);
 	if (ret_val)
 		return (1);
 	return (0);

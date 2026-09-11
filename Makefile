@@ -30,6 +30,7 @@ EXM					:= example
 
 # SOURCE SUB-DIRECTORIES
 CORE				:= core
+PARSER				:= parser
 
 # LIB SUB-DIRECTORIES
 LIBFT				:= libft
@@ -43,6 +44,8 @@ endif
 LFT					:= libft.a
 LMLX				:= libmlx.a
 
+LIBFT_A				:= $(LIB)/$(LIBFT)/$(LFT)
+LIBMLX_A			:= $(LIB)/$(LIBMLX)/$(LMLX)
 # ------------------- COMPILER -------------------- #
 ifeq ($(findstring clang,$(CC_VERSION)),clang)
     COMPILER := clang
@@ -73,12 +76,23 @@ else ifeq ($(MODE),release)
 	CFLAGS += -O3 -march=native
 endif
 
-CPPFLAGS		:= -I$(LIB)/$(LIBFT)/include -I$(LIB)/$(LIBMLX)
-LDFLAGS			:= -L/$(LIB)/$(LIBFT) -L/$(LIB)/$(LIBMLX)
+CPPFLAGS		:= -I$(HDR) -I$(LIB)/$(LIBFT)/include -I$(LIB)/$(LIBMLX)
+LDFLAGS			:= -L$(LIB)/$(LIBFT) -L$(LIB)/$(LIBMLX)
 LDLIBS			:= -lm -lft -lmlx -lXext -lX11
 
 # --------------------- FILES --------------------- #
-SOURCES			:=
+SOURCES			:= \
+$(SRC)/$(CORE)/main.c \
+$(SRC)/$(PARSER)/parser.c \
+$(SRC)/$(PARSER)/parse_blanks.c \
+$(SRC)/$(PARSER)/parse_amb_lighting.c \
+$(SRC)/$(PARSER)/parse_camera.c \
+$(SRC)/$(PARSER)/parse_cylinder.c \
+$(SRC)/$(PARSER)/parse_light.c \
+$(SRC)/$(PARSER)/parse_plane.c \
+$(SRC)/$(PARSER)/parse_sphere.c \
+$(SRC)/$(PARSER)/parser_set.c \
+$(SRC)/$(PARSER)/parser_utils.c \
 
 # -------------------- OBJECTS -------------------- #
 OBJECTS			:= $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))
@@ -89,12 +103,18 @@ ASSEMBLEUR		:= $(patsubst $(SRC)/%.c, $(ASM)/%.s, $(SOURCES))
 # --------------------- RULES --------------------- #
 all: $(NAME)
 
-$(NAME): $(LIBFT) $(MLX) $(OBJECTS)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $(OBJECTS) -o $@
+$(NAME): $(LIBFT_A) $(LIBMLX_A) $(OBJECTS)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJECTS) $(LDLIBS) -o $@
+
+$(LIBFT_A):
+	make -C $(LIB)/$(LIBFT)
+
+$(LIBMLX_A):
+	make -C $(LIB)/$(LIBMLX)
 
 $(OBJ)/%.o: $(SRC)/%.c
 	$(MKDIRP) $(dir $@)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $< -o $@
+	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 $(ASM)/%.s: $(SRC)/%.c
 	$(MKDIRP) $(dir $@)

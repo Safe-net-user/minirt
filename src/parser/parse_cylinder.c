@@ -5,8 +5,10 @@ int	parse_cylinder(t_parser *p)
 	float	diameter;
 	float	height;
 
+	p->index++;
 	if (p->str[p->index] != 'y')
 		return (1);
+	p->index++;
 	while (p->str[p->index] == ' ')
 		p->index++;
 	if (parse_coordinates(p))

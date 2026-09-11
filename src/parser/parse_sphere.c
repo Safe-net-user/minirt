@@ -4,6 +4,7 @@ int	parse_sphere(t_parser *p)
 {
 	float	diameter;
 
+	p->index++;
 	if (p->str[p->index] != 'p')
 		return (1);
 	p->index++;

@@ -6,6 +6,7 @@ int	parse_camera(t_parser *p)
 
 	if (p->is_camera)
 		return (1);
+	p->index++;
 	while (p->str[p->index] == ' ')
 		p->index++;
 	if (parse_coordinates(p))

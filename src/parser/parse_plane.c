@@ -2,8 +2,10 @@
 
 int	parse_plane(t_parser *p)
 {
+	p->index++;
 	if (p->str[p->index] != 'l')
 		return (1);
+	p->index++;
 	while (p->str[p->index] == ' ')
 		p->index++;
 	if (parse_coordinates(p))

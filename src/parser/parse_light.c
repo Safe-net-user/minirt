@@ -4,6 +4,7 @@ int	parse_light(t_parser *p)
 {
 	if (p->is_light)
 		return (1);
+	p->index++;
 	while (p->str[p->index] == ' ')
 		p->index++;
 	if (parse_coordinates(p))

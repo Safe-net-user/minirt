@@ -14,7 +14,6 @@ ROOT			:= ../../..
 OBJ				:= $(ROOT)/obj
 LIB				:= $(ROOT)/lib
 INC				:= $(ROOT)/include
-TEST_INC		:= include
 
 PARSER			:= parser
 LIBFT			:= libft
@@ -42,7 +41,6 @@ CFLAGS			:= -Wall -Wextra -Werror
 
 CPPFLAGS		:= \
 	-I$(INC) \
-	-I$(TEST_INC) \
 	-I$(LIB)/$(LIBFT)/include
 
 LDFLAGS			:= -L$(LIB)/$(LIBFT)

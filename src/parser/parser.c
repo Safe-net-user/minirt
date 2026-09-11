@@ -2,40 +2,35 @@
 #include "ft_strings.h"
 #include <stdlib.h>
 #include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
 
-static void	init_lut(t_state_parser_fn *lut)
+int	handle_parser_error(t_parser *p)
 {
-	lut[NORMAL] = parser_normal;
-	lut[AMBIENT_LIGHTNING] = parser_amb_light;
-	lut[CAMERA] = parser_cam;
-	lut[LIGHT] = parser_light;
-	lut[SPHERE] = parser_sphere;
-	lut[PLANE] = parser_plane;
-	lut[CYLINDER] = parser_cylinder;
+	(void)p;
+	printf("Error\n");
+	return (0);
 }
 
-static void	init_parser(t_parser *p, char *str)
+static int	parser_fsm(unsigned char *fb)
 {
-	p->str = str;
-	p->index = 0;
-	p->state = NORMAL;
-}
+	t_parser	p;
+	t_parser_fn	lut[256];
+	int			ret_val;
 
-static int	parser_fsm(char *fb)
-{
-	t_parser			p;
-	t_state_parser_fn	lut[256];
-	int					ret_val;
-
-	init_lut(&lut);
-	init_parser(&p, fb);
-	while (fb[p->index] && !ret_val)
+	ret_val = 0;
+	set_lut(lut);
+	set_parser(&p, fb);
+	while (p.str[p.index] && !ret_val)
 	{
-		ret_val = lut[p->state](&p);
-		p->index++;
+		ret_val = lut[p.str[p.index]](&p);
+		p.index++;
 	}
 	if (ret_val)
+	{
+		handle_parser_error(&p);
 		return (1);
+	}
 	return (0);
 }
 
@@ -44,8 +39,10 @@ int	parser(char *path)
 	char	buff[BUFFER_SIZE + 1];
 	char	*file_bytes;
 	int		br;
+	int		fd;
+	int		ret_val;
 
-	fd = open(path);
+	fd = open(path, 0);
 	file_bytes = NULL;
 	if (fd < 0)
 		return (1);
@@ -59,12 +56,14 @@ int	parser(char *path)
 	while (br > 0)
 	{
 		file_bytes = ft_strjoin_free(file_bytes, buff, 1);
-		br = read(fd, buffer, BUFFER_SIZE);
+		br = read(fd, buff, BUFFER_SIZE);
 		if (br == -1)
 		{
 			close(fd);
 			return (1);
 		}
 	}
-	return (parser_fsm(file_bytes), free(file_bytes));
+	ret_val = parser_fsm((unsigned char *)file_bytes);
+	free(file_bytes);
+	return (ret_val);
 }

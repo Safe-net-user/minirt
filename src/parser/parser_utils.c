@@ -3,52 +3,62 @@
 
 int	parse_float(t_parser *p, float *value)
 {
-	float	result;
-	float	div;
-	bool	minus;
+	unsigned	int	n;
+	unsigned	int	dec;
+	size_t			i;
+	bool			minus;
 
-	minus = p->str[p->index] == '-';
-	p->index += minus;
-	if (!ft_isdigit(p->str[p->index]))
+	i = p->index;
+	minus = p->str[i] == '-';
+	i += minus;
+	if (!parser_isdigit(p->str[i]))
 		return (1);
-	result = 0.0f;
-	while (ft_isdigit(p->str[p->index]))
+	n = 0;
+	dec = 0;
+	while (parser_isdigit(p->str[i]))
 	{
-		result = result * 10.0f + (p->str[p->index] - '0');
-		p->index++;
+		n = n * 10 + (p->str[i] - '0');
+		i++;
 	}
-	if (p->str[p->index] == '.')
+	if (p->str[i] == '.')
 	{
-		p->index++;
-		div = 10.0f;
-		while (ft_isdigit(p->str[p->index]))
+		i++;
+		while (parser_isdigit(p->str[i]))
 		{
-			result += (p->str[p->index] - '0') / div;
-			div *= 10.0f;
-			p->index++;
+			n = n * 10 + (p->str[i] - '0');
+			dec++;
+			i++;
 		}
 	}
-	if (minus)
-		*value = -result;
+	if (dec == 0)
+		*value = (float)n;
+	else if (dec == 1)
+		*value = (float)n * 0.1f;
 	else
-		*value = result;
+		*value = (float)n * 0.01f;
+	if (minus)
+		*value = -*value;
+	p->index = i;
 	return (0);
 }
 
 int	parse_uchar(t_parser *p, unsigned int *value)
 {
 	unsigned int	n;
+	unsigned int	digits;
 
-	if (!ft_isdigit(p->str[p->index]))
+	if (!parser_isdigit(p->str[p->index]))
 		return (1);
 	n = 0;
-	while (ft_isdigit(p->str[p->index]))
+	digits = 0;
+	while (digits < 3 && parser_isdigit(p->str[p->index]))
 	{
 		n = n * 10 + (p->str[p->index] - '0');
-		if (n > 255)
-			return (1);
+		digits++;
 		p->index++;
 	}
+	if (n > 255)
+		return (1);
 	*value = n;
 	return (0);
 }

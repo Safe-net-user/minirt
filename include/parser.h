@@ -1,12 +1,11 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#ifndef BUFFER_SIZE
-# define BUFFER_SIZE 4096
+#ifndef CAPACITY_SIZE
+# define CAPACITY_SIZE 65536
 #endif
 
 # include <stddef.h>
-# include <stdint.h>
 
 typedef enum e_state
 {
@@ -45,6 +44,11 @@ int	parse_cylinder(t_parser *p);
 int	parse_light(t_parser *p);
 int	parse_plane(t_parser *p);
 int	parse_sphere(t_parser *p);
+
+static inline int	parser_isdigit(int c)
+{
+	return (c <= '9' && c >= '0');
+}
 
 static inline int	parse_color(t_parser *p)
 {
@@ -106,7 +110,7 @@ static inline int	parse_norm_vec3(t_parser *p)
 	p->index++;
 	if (parse_float(p, &z))
 		return (1);
-	if (x >= -1.0 && x <= 1.0)
+	if (x < -1.0 && x > 1.0)
 		return (1);
 	return (0);
 }
@@ -119,5 +123,4 @@ static inline int	parse_ratio(t_parser *p)
 		return (1);
 	return (ratio > 1.0f);
 }
-
 #endif //PARSER_H

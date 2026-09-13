@@ -21,6 +21,8 @@ int	parse_light(t_parser *p)
 	float	ratio;
 
 	p->index++;
+	if (p->is_light)
+		return (1);
 	while (p->str[p->index] == ' ')
 		p->index++;
 	if (parse_coordinates(p, &x, &y, &z))

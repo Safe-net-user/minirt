@@ -25,7 +25,6 @@ static int	parser_fsm(t_mrt *mrt, unsigned char *fb)
 	while (p.str[p.index] && !ret_val)
 	{
 		ret_val = lut[p.str[p.index]](&p);
-		p.index++;
 	}
 	if (ret_val)
 	{

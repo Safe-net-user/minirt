@@ -34,8 +34,10 @@ int	parse_float(t_parser *p, float *value)
 		*value = (float)n;
 	else if (dec == 1)
 		*value = (float)n * 0.1f;
-	else
+	else if (dec == 2)
 		*value = (float)n * 0.01f;
+	else
+		return (1);
 	if (minus)
 		*value = -*value;
 	p->index = i;

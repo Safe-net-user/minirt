@@ -83,6 +83,8 @@ LDLIBS			:= -lm -lft -lmlx -lXext -lX11
 # --------------------- FILES --------------------- #
 SOURCES			:= \
 $(SRC)/$(CORE)/main.c \
+$(SRC)/$(CORE)/init.c \
+$(SRC)/$(CORE)/free.c \
 $(SRC)/$(PARSER)/parser.c \
 $(SRC)/$(PARSER)/parse_blanks.c \
 $(SRC)/$(PARSER)/parse_amb_lighting.c \

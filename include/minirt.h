@@ -7,7 +7,6 @@
 
 typedef struct s_mrt
 {
-	t_stack_alloc	*sa;
 	t_sphere		sphere;
 	t_plane			plane;
 	t_cylinder		cylinder;
@@ -15,5 +14,7 @@ typedef struct s_mrt
 	t_amb_light		amb_light;
 	t_light			light;
 }	t_mrt;
+
+int parser(t_mrt *mrt, char *path);
 
 #endif //MINIRT_H

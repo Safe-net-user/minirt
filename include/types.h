@@ -27,19 +27,19 @@ typedef struct s_cam
 }	t_cam;
 
 typedef struct s_amb_light {
+	float	ratio;
 	uint8_t	r;
 	uint8_t	g;
 	uint8_t	b;
-	uint8_t	ratio;
 }	t_amb_light;
 
 typedef struct s_light
 {
 	t_vec3	coords;
+	float	ratio;
 	uint8_t	r;
 	uint8_t	g;
 	uint8_t	b;
-	uint8_t	ratio;
 	char	padding[4];
 }	t_light;
 

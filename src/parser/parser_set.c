@@ -20,8 +20,9 @@ void	set_lut(t_parser_fn *lut)
 	lut['c'] = parse_cylinder;
 }
 
-void	set_parser(t_parser *p, unsigned char *str)
+void	set_parser(t_parser *p, t_mrt *mrt,  unsigned char *str)
 {
+	p->mrt = mrt;
 	p->str = str;
 	p->index = 0;
 	p->state = NORMAL;

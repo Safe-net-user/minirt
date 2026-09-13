@@ -15,6 +15,8 @@ typedef struct s_mrt
 	t_light			light;
 }	t_mrt;
 
-int parser(t_mrt *mrt, char *path);
+int		parser(t_mrt *mrt, char *path);
+int		init_minirt(t_mrt *mrt);
+void	free_mrt(t_mrt *mrt);
 
 #endif //MINIRT_H

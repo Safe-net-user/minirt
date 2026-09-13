@@ -12,6 +12,7 @@ RMRF			:= rm -rf
 # ------------------ DIRECTORIES ---------------- #
 ROOT			:= ../../..
 OBJ				:= $(ROOT)/obj
+CORE			:= core
 LIB				:= $(ROOT)/lib
 INC				:= $(ROOT)/include
 
@@ -23,6 +24,8 @@ SRC				:= parser_tester.c
 TEST_OBJ		:= $(OBJ)/test/parser_tester.o
 
 OBJ_FILES		:= \
+	$(OBJ)/$(CORE)/init.o \
+	$(OBJ)/$(CORE)/free.o \
 	$(OBJ)/$(PARSER)/parse_amb_lighting.o \
 	$(OBJ)/$(PARSER)/parse_blanks.o \
 	$(OBJ)/$(PARSER)/parse_camera.o \
@@ -41,7 +44,8 @@ CFLAGS			:= -Wall -Wextra -Werror
 
 CPPFLAGS		:= \
 	-I$(INC) \
-	-I$(LIB)/$(LIBFT)/include
+	-I$(LIB)/$(LIBFT)/include \
+	-I$(ROOT)/src/parser
 
 LDFLAGS			:= -L$(LIB)/$(LIBFT)
 LDLIBS			:= -lft

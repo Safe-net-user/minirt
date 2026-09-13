@@ -10,7 +10,7 @@ typedef struct s_sphere_tracer
 	t_vec	*x;
 	t_vec	*y;
 	t_vec	*z;
-	t_vec	*diam;
+	t_vec	*radius;
 }	t_st;
 
 typedef struct s_sphere_render
@@ -23,8 +23,8 @@ typedef struct s_sphere_render
 
 typedef struct s_sphere
 {
-	t_st	*st;
-	t_sr	*sr;
+	t_st	st;
+	t_sr	sr;
 }	t_sphere;
 
 typedef struct s_plane_tracer
@@ -48,8 +48,8 @@ typedef struct s_plane_render
 
 typedef struct s_plane
 {
-	t_pt	*pt;
-	t_pr	*pr;
+	t_pt	pt;
+	t_pr	pr;
 }	t_plane;
 
 typedef struct s_cylinder_tracer
@@ -60,7 +60,7 @@ typedef struct s_cylinder_tracer
 	t_vec	*dx;
 	t_vec	*dy;
 	t_vec	*dz;
-	t_vec	*diam;
+	t_vec	*radius;
 	t_vec	*height;
 }	t_ct;
 
@@ -74,8 +74,8 @@ typedef struct s_cylinder_render
 
 typedef struct s_cylinder
 {
-	t_ct	*ct;
-	t_cr	*cr;
+	t_ct	ct;
+	t_cr	cr;
 }	t_cylinder;
 
 _Static_assert(sizeof(t_st) == 32);

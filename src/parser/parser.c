@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "minirt.h"
 #include "ft_strings.h"
 #include <stdlib.h>
 #include <fcntl.h>
@@ -12,7 +13,7 @@ int	handle_parser_error(t_parser *p)
 	return (0);
 }
 
-static int	parser_fsm(unsigned char *fb)
+static int	parser_fsm(t_mrt *mrt, unsigned char *fb)
 {
 	t_parser	p;
 	t_parser_fn	lut[256];
@@ -20,7 +21,7 @@ static int	parser_fsm(unsigned char *fb)
 
 	ret_val = 0;
 	set_lut(lut);
-	set_parser(&p, fb);
+	set_parser(&p, mrt, fb);
 	while (p.str[p.index] && !ret_val)
 	{
 		ret_val = lut[p.str[p.index]](&p);
@@ -34,36 +35,52 @@ static int	parser_fsm(unsigned char *fb)
 	return (0);
 }
 
-int	parser(char *path)
+int parser(t_mrt *mrt, char *path)
 {
-	char	buff[BUFFER_SIZE + 1];
-	char	*file_bytes;
-	int		br;
-	int		fd;
-	int		ret_val;
+	char    *file_bytes;
+	size_t  capacity;
+	size_t  len;
+	ssize_t br;
+	int     fd;
+	int     ret;
 
-	fd = open(path, 0);
-	file_bytes = NULL;
+	fd = open(path, O_RDONLY);
 	if (fd < 0)
 		return (1);
-	br = read(fd, buff, BUFFER_SIZE);
-	buff[BUFFER_SIZE] = '\0';
-	if (br == -1)
+	capacity = 65536;
+	len = 0;
+	file_bytes = malloc(capacity + 1);
+	if (!file_bytes)
 	{
 		close(fd);
 		return (1);
 	}
-	while (br > 0)
+	while (1)
 	{
-		file_bytes = ft_strjoin_free(file_bytes, buff, 1);
-		br = read(fd, buff, BUFFER_SIZE);
-		if (br == -1)
+		if (len == capacity)
 		{
+			capacity *= 2;
+			file_bytes = realloc(file_bytes, capacity + 1);
+			if (!file_bytes)
+			{
+				close(fd);
+				return (1);
+			}
+		}
+		br = read(fd, file_bytes + len, capacity - len);
+		if (br < 0)
+		{
+			free(file_bytes);
 			close(fd);
 			return (1);
 		}
+		if (br == 0)
+			break;
+		len += br;
 	}
-	ret_val = parser_fsm((unsigned char *)file_bytes);
+	file_bytes[len] = '\0';
+	ret = parser_fsm(mrt, (unsigned char *)file_bytes);
 	free(file_bytes);
-	return (ret_val);
+	close(fd);
+	return (ret);
 }

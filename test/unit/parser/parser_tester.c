@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "minirt.h"
 #include <dirent.h>
 #include <stdio.h>
 #include <string.h>
@@ -9,8 +10,11 @@
 #ifndef PATH_ERROR_TEST_SCENE
  #define PATH_ERROR_TEST_SCENE "../../../scene/test/error/"
 #endif
+#ifndef PATH_STRESS_TEST_SCENE
+ #define PATH_STRESS_TEST_SCENE "../../../scene/test/stress"
+#endif
 
-static int	test_scene(const char *dir, const char *file, int expected)
+static int	test_scene(t_mrt *mrt, const char *dir, const char *file, int expected)
 {
 	char	path[PATH_MAX];
 	int		ret;
@@ -21,7 +25,7 @@ static int	test_scene(const char *dir, const char *file, int expected)
 		printf("  [FAIL] %s: path too long\n", file);
 		return (1);
 	}
-	ret = parser(path);
+	ret = parser(mrt, path);
 	if ((ret == 0) != (expected == 0))
 	{
 		printf("  [FAIL] %-40s expected=%d got=%d\n",
@@ -34,6 +38,7 @@ static int	test_scene(const char *dir, const char *file, int expected)
 
 static int	run_tests(const char *dir, int expected)
 {
+	t_mrt			mrt;
 	DIR				*folder;
 	struct dirent	*entry;
 	int				total;
@@ -49,10 +54,16 @@ static int	run_tests(const char *dir, int expected)
 	failed = 0;
 	while ((entry = readdir(folder)) != NULL)
 	{
+		if (init_minirt(&mrt))
+		{
+			printf("ALLOCATION FAILED");
+			return (-1);
+		}
 		if (entry->d_name[0] == '.')
 			continue ;
 		total++;
-		failed += test_scene(dir, entry->d_name, expected);
+		failed += test_scene(&mrt, dir, entry->d_name, expected);
+		free_mrt(&mrt);
 	}
 	closedir(folder);
 	printf("\n%d tests, %d passed, %d failed\n",
@@ -62,8 +73,9 @@ static int	run_tests(const char *dir, int expected)
 
 int	main(void)
 {
-	int	valid_failed;
-	int	error_failed;
+	int		valid_failed;
+	int		error_failed;
+	int		stress_failed;
 
 	printf("\n");
 	printf("========================================\n");
@@ -76,10 +88,14 @@ int	main(void)
 	printf("\n[ERROR SCENES]\n");
 	error_failed = run_tests(PATH_ERROR_TEST_SCENE, 1);
 	printf("\n========================================\n");
-	if (valid_failed == 0 && error_failed == 0)
+
+	printf("\n[STRESS SCENES]\n");
+	stress_failed = run_tests(PATH_STRESS_TEST_SCENE, 0);
+	printf("\n========================================\n");
+	if (valid_failed == 0 && error_failed == 0 && stress_failed == 0)
 		printf("ALL TESTS PASSED\n");
 	else
 		printf("TESTS FAILED\n");
 	printf("========================================\n\n");
-	return (valid_failed != 0 || error_failed != 0);
+	return (valid_failed != 0 || error_failed != 0 || stress_failed != 0);
 }

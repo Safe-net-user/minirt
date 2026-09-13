@@ -5,22 +5,21 @@
 #include "macros.h"
 #include "vector.h"
 
-
 typedef struct s_sphere_tracer
 {
 	t_vec	*x;
 	t_vec	*y;
 	t_vec	*z;
 	t_vec	*diam;
-}	__attribute__((__aligned__(STRUCT_ALIGNMENT_32))) t_st;
+}	t_st;
 
 typedef struct s_sphere_render
 {
-	uint8_t *r;
-	uint8_t	*g;
-	uint8_t	*b;
+	t_vec	*r;
+	t_vec	*g;
+	t_vec	*b;
 	uint8_t	padding[STRUCT_ALIGNMENT_32 - (sizeof(t_vec *) * 3)];
-}	__attribute__((__aligned__(STRUCT_ALIGNMENT_32))) t_sr;
+}	t_sr;
 
 typedef struct s_sphere
 {
@@ -37,15 +36,15 @@ typedef struct s_plane_tracer
 	t_vec	*dy;
 	t_vec	*dz;
 	uint8_t	padding[STRUCT_ALIGNMENT_64 - (sizeof(t_vec *) * 6)];
-}	__attribute__((__aligned__(STRUCT_ALIGNMENT_64))) t_pt;
+}	t_pt;
 
 typedef struct s_plane_render
 {
-	uint8_t	*r;
-	uint8_t	*g;
-	uint8_t	*b;
+	t_vec	*r;
+	t_vec	*g;
+	t_vec	*b;
 	uint8_t	padding[STRUCT_ALIGNMENT_32 - (sizeof(t_vec *) * 3)];
-}	__attribute__((__aligned__(STRUCT_ALIGNMENT_32))) t_pr;
+}	t_pr;
 
 typedef struct s_plane
 {
@@ -63,19 +62,27 @@ typedef struct s_cylinder_tracer
 	t_vec	*dz;
 	t_vec	*diam;
 	t_vec	*height;
-}	__attribute__((__aligned__(STRUCT_ALIGNMENT_64))) t_ct;
+}	t_ct;
 
 typedef struct s_cylinder_render
 {
-	uint8_t	*r;
-	uint8_t	*g;
-	uint8_t	*b;
+	t_vec	*r;
+	t_vec	*g;
+	t_vec	*b;
 	uint8_t	padding[STRUCT_ALIGNMENT_32 - (sizeof(t_vec *) * 3)];
-}	__attribute__((__aligned__(STRUCT_ALIGNMENT_32))) t_cr;
+}	t_cr;
 
 typedef struct s_cylinder
 {
 	t_ct	*ct;
 	t_cr	*cr;
 }	t_cylinder;
+
+_Static_assert(sizeof(t_st) == 32);
+_Static_assert(sizeof(t_sr) == 32);
+_Static_assert(sizeof(t_pt) == 64);
+_Static_assert(sizeof(t_pr) == 32);
+_Static_assert(sizeof(t_ct) == 64);
+_Static_assert(sizeof(t_cr) == 32);
+
 #endif //SHAPE_H

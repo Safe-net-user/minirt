@@ -1,6 +1,10 @@
 #ifndef MACROS_H
 #define MACROS_H
 
+#ifndef SIZE_VECTOR
+# define SIZE_VECTOR 32768
+#endif
+
 #ifndef STRUCT_ALIGNMENT_64
 # define STRUCT_ALIGNMENT_64 64
 #endif
@@ -17,4 +21,4 @@
 # define Window_HEIGHT 2048
 #endif
 
-#endif //MINIRT_MACROS_H
+#endif //MACROS_H

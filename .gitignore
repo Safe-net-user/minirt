@@ -1,8 +1,12 @@
 *.o
 *.out
+*.exe
 *.a
 *.d
 ./obj
 ./asm
 *.s
+.vscode/
 .DS_Store
+.idea
+./build

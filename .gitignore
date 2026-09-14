@@ -6,7 +6,9 @@
 ./obj
 ./asm
 *.s
+*.un~
 .vscode/
 .DS_Store
 .idea
 ./build
+miniRT

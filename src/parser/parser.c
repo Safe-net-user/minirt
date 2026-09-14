@@ -6,28 +6,31 @@
 #include <stdio.h>
 #include <unistd.h>
 
-int	handle_parser_error(t_parser *p)
+t_p_ret	handle_parser_error(t_parser *p)
 {
-	(void)p;
-	printf("Error\n");
-	return (0);
+	char	*lut_msg[13];
+
+	set_lut_msg(lut_msg);
+	printf("Error: %s\n", lut_msg[p->code_status]);
+	return (ERROR);
 }
 
 static int	parser_fsm(t_mrt *mrt, unsigned char *fb)
 {
 	t_parser	p;
 	t_parser_fn	lut[256];
-	int			ret_val;
+	int			code_status;
 
-	ret_val = 0;
+	code_status = 0;
 	set_lut(lut);
 	set_parser(&p, mrt, fb);
-	while (p.str[p.index] && !ret_val)
+	while (p.str[p.index] && !code_status)
 	{
-		ret_val = lut[p.str[p.index]](&p);
+		code_status = lut[p.str[p.index]](&p);
 	}
-	if (ret_val)
+	if (code_status)
 	{
+		p.code_status = code_status;
 		handle_parser_error(&p);
 		return (1);
 	}

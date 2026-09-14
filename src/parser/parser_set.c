@@ -20,12 +20,27 @@ void	set_lut(t_parser_fn *lut)
 	lut['c'] = parse_cylinder;
 }
 
+void	set_lut_msg(char **lut)
+{
+	lut[BAD_IDENTIFIER] = "invalid identifier";
+	lut[D_CAMERA] = "duplicate camera";
+	lut[D_LIGHT] = "duplicate light";
+	lut[D_AMB_LIGHT] = "duplicate ambient light";
+	lut[COLOR] = "invalid color";
+	lut[FOV] = "invalid field of view";
+	lut[RATIO] = "invalid resolution ratio";
+	lut[COORDS] = "invalid coordinates";
+	lut[DIRECTION] = "invalid direction";
+	lut[DIAMETER] = "invalid diameter";
+	lut[HEIGHT] = "invalid height";
+}
+
 void	set_parser(t_parser *p, t_mrt *mrt,  unsigned char *str)
 {
 	p->mrt = mrt;
 	p->str = str;
 	p->index = 0;
-	p->state = NORMAL;
+	p->code_status = BAD_IDENTIFIER;
 	p->is_camera = 0;
 	p->is_amb_light = 0;
 	p->is_light = 0;

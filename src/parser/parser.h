@@ -4,43 +4,50 @@
 # include <stddef.h>
 # include "../../include/minirt.h"
 
-typedef enum e_state
+typedef enum e_parser_return_value
 {
-	NORMAL,
-	AMBIENT_LIGHTNING,
-	CAMERA,
-	LIGHT,
-	SPHERE,
-	PLANE,
-	CYLINDER,
-} __attribute__ ((__packed__)) t_state;
+	SUCCESS,
+	ERROR,
+	BAD_IDENTIFIER,
+	D_CAMERA,
+	D_LIGHT,
+	D_AMB_LIGHT,
+	COLOR,
+	FOV,
+	RATIO,
+	COORDS,
+	DIRECTION,
+	DIAMETER,
+	HEIGHT
+} __attribute__ ((__packed__)) t_p_ret;
 
 typedef struct s_parser
 {
 	t_mrt			*mrt;
 	unsigned char	*str;
-	size_t	index;
-	t_state	state;
-	bool	is_camera;
-	bool	is_amb_light;
-	bool	is_light;
-	char	padding[1];
+	size_t			index;
+	t_p_ret			code_status;
+	bool			is_camera;
+	bool			is_amb_light;
+	bool			is_light;
+	char			padding[1];
 }	t_parser;
 
-typedef int	(*t_parser_fn)(t_parser *);
+typedef t_p_ret	(*t_parser_fn)(t_parser *);
 
-int	handle_parser_error(t_parser *p);
+t_p_ret	handle_parser_error(t_parser *p);
 void	set_lut(t_parser_fn *lut);
+void	set_lut_msg(char **lut);
 void	set_parser(t_parser *p, t_mrt *mrt, unsigned char *str);
-int	parse_float(t_parser *p, float *value);
-int	parse_uchar(t_parser *p, unsigned int *value);
-int	parse_amb_light(t_parser *p);
-int	parse_blanks(t_parser *p);
-int	parse_camera(t_parser *p);
-int	parse_cylinder(t_parser *p);
-int	parse_light(t_parser *p);
-int	parse_plane(t_parser *p);
-int	parse_sphere(t_parser *p);
+int		parse_float(t_parser *p, float *value);
+int		parse_uchar(t_parser *p, unsigned int *value);
+t_p_ret	parse_amb_light(t_parser *p);
+t_p_ret	parse_blanks(t_parser *p);
+t_p_ret	parse_camera(t_parser *p);
+t_p_ret	parse_cylinder(t_parser *p);
+t_p_ret	parse_light(t_parser *p);
+t_p_ret	parse_plane(t_parser *p);
+t_p_ret	parse_sphere(t_parser *p);
 
 static inline int	parser_isdigit(int c)
 {

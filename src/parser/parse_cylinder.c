@@ -1,7 +1,7 @@
 #include "parser.h"
 #include "setter/set_cylinder.h"
 
-static inline int	parse_cylinder_end(t_parser *p)
+static inline t_p_ret	parse_cylinder_end(t_parser *p)
 {
 	unsigned int	r;
 	unsigned int	g;
@@ -11,17 +11,17 @@ static inline int	parse_cylinder_end(t_parser *p)
 	while (p->str[p->index] == ' ')
 		p->index++;
 	if (parse_float(p, &height))
-		return (1);
+		return (HEIGHT);
 	set_cylinder_height(&p->mrt->cylinder.ct, height);
 	while (p->str[p->index] == ' ')
 		p->index++;
 	if (parse_color(p, &r, &g, &b))
-		return (1);
+		return (COLOR);
 	set_cylinder_color(&p->mrt->cylinder.cr, r, g, b);
-	return (0);
+	return (SUCCESS);
 }
 
-int	parse_cylinder(t_parser *p)
+t_p_ret	parse_cylinder(t_parser *p)
 {
 	float	diam;
 	float	x;
@@ -30,22 +30,22 @@ int	parse_cylinder(t_parser *p)
 
 	p->index++;
 	if (p->str[p->index] != 'y')
-		return (1);
+		return (BAD_IDENTIFIER);
 	p->index++;
 	while (p->str[p->index] == ' ')
 		p->index++;
 	if (parse_coordinates(p, &x, &y, &z))
-		return (1);
+		return (COORDS);
 	set_cylinder_coords(&p->mrt->cylinder.ct, x, y, z);
 	while (p->str[p->index] == ' ')
 		p->index++;
 	if (parse_norm_vec3(p, &x, &y, &z))
-		return (1);
+		return (DIRECTION);
 	set_cylinder_direction(&p->mrt->cylinder.ct, x, y, z);
 	while (p->str[p->index] == ' ')
 		p->index++;
 	if (parse_float(p, &diam))
-		return (1);
+		return (DIAMETER);
 	set_cylinder_radius(&p->mrt->cylinder.ct, diam);
 	return (parse_cylinder_end(p));
 }

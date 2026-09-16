@@ -1,5 +1,5 @@
-#ifndef MINIRT_SET_CYLINDER_H
-#define MINIRT_SET_CYLINDER_H
+#ifndef SET_CYLINDER_H
+#define SET_CYLINDER_H
 
 static inline void	set_cylinder_coords(t_ct *ct, float x, float y, float z)
 {

@@ -2,7 +2,6 @@
 #define MATRIX4_H
 
 #include "../point.h"
-#include "maths_mrt.h"
 
 typedef struct s_matrix4
 {

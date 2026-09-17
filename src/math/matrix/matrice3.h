@@ -1,5 +1,5 @@
-#ifndef MATRIX_H
-# define MATRIX_H
+#ifndef MATRIX3_H
+# define MATRIX3_H
 
 #include "matrix2.h"
 

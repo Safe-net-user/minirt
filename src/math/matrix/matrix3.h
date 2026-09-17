@@ -12,6 +12,6 @@ void	submatrix3(t_m2 *mf, t_m3, int i, int j);
 double	compute_minor3(t_m3 m, int i, int j);
 double	compute_cofactors3(t_m3 m, int i, int j);
 double	compute_minor3(t_m3 m, int i, int j);
-double	compute_determinant3(const t_m3 m);
+double	compute_determinant3(t_m3 m);
 
 #endif

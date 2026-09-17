@@ -2,6 +2,7 @@
 #define MATRIX4_H
 
 #include "../point.h"
+#include "matrix3.h"
 
 typedef struct s_matrix4
 {
@@ -36,7 +37,6 @@ static __attribute__((always_inline)) void	mul_matrix4_by_vector(t_vec4 *fv, t_v
 
 void	submatrix4(t_m3 *mf, t_m4 m, int i, int j);
 void	transpose_matrices4(t_m4 *fm, t_m4 m);
-void	submatrix4(t_m3 *mf, t_m4 m, int i, int j);
 double	compute_minor4(t_m4 m, int i, int j);
 double	compute_cofactors4(t_m4 m, int i, int j);
 double	compute_determinant4(t_m4 m);

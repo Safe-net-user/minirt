@@ -31,6 +31,7 @@ EXM					:= example
 # SOURCE SUB-DIRECTORIES
 CORE				:= core
 PARSER				:= parser
+MATHS				:= maths
 
 # LIB SUB-DIRECTORIES
 LIBFT				:= libft
@@ -46,6 +47,7 @@ LMLX				:= libmlx.a
 
 LIBFT_A				:= $(LIB)/$(LIBFT)/$(LFT)
 LIBMLX_A			:= $(LIB)/$(LIBMLX)/$(LMLX)
+
 # ------------------- COMPILER -------------------- #
 ifeq ($(findstring clang,$(CC_VERSION)),clang)
     COMPILER := clang
@@ -73,7 +75,7 @@ ifeq ($(MODE),debug)
 else ifeq ($(MODE),debug_memory)
 	CFLAGS += -g -O1 -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer
 else ifeq ($(MODE),release)
-	CFLAGS += -O3 -march=native
+	CFLAGS += -O3 -ffast-math -march=native
 endif
 
 CPPFLAGS		:= -I$(HDR) -I$(LIB)/$(LIBFT)/include -I$(LIB)/$(LIBMLX)
@@ -95,6 +97,8 @@ $(SRC)/$(PARSER)/parse_plane.c \
 $(SRC)/$(PARSER)/parse_sphere.c \
 $(SRC)/$(PARSER)/parser_set.c \
 $(SRC)/$(PARSER)/parser_utils.c \
+$(SRC)/$(MATHS)/matrix/matrix3.c \
+$(SRC)/$(MATHS)/matrix/matrix4.c \
 
 # -------------------- OBJECTS -------------------- #
 OBJECTS			:= $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))

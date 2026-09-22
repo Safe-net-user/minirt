@@ -3,19 +3,20 @@
 
 #include "../point.h"
 #include "matrix3.h"
+#include <immintrin.h>
 
 typedef struct s_matrix4
 {
 	double	d[16];
 }	t_m4;
 
-static __attribute__((always_inline)) void	set_matrix4(t_m4 *m, __m512d a, __m512d b)
+static inline __attribute__((always_inline)) void	set_matrix4(t_m4 *m, const __m512d a, const __m512d b)
 {
 	_mm512_storeu_pd(m->d, a);
 	_mm512_storeu_pd(&m->d[8], b);
 }
 
-static __attribute__((always_inline)) void	mul_matrix4_by_point(t_point *fp, t_point p, t_m4 m)
+static inline __attribute__((always_inline)) void	mul_matrix4_by_point(t_point *fp, const t_point p, const t_m4 m)
 {
 	set_point(
 		fp,
@@ -25,7 +26,7 @@ static __attribute__((always_inline)) void	mul_matrix4_by_point(t_point *fp, t_p
 		);
 }
 
-static __attribute__((always_inline)) void	mul_matrix4_by_vector(t_vec4 *fv, t_vec4 v, t_m4 m)
+static inline __attribute__((always_inline)) void	mul_matrix4_by_vector(t_vec4 *fv, const t_vec4 v, const t_m4 m)
 {
 	set_vec4(
 		fv,
@@ -35,6 +36,7 @@ static __attribute__((always_inline)) void	mul_matrix4_by_vector(t_vec4 *fv, t_v
 		);
 }
 
+void	mul_matrices4(t_m4 *fm, const t_m4 m1, const t_m4 m2);
 void	submatrix4(t_m3 *mf, t_m4 m, int i, int j);
 void	transpose_matrices4(t_m4 *fm, t_m4 m);
 double	compute_minor4(t_m4 m, int i, int j);

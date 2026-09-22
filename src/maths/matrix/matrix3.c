@@ -4,7 +4,9 @@ void	submatrix3(t_m2 *mf, const t_m3 m, const int i, const int j)
 {
 	int	k;
 	int	l;
+	int	index;
 
+	index = 0;
 	k = 0;
 	while (k < 3)
 	{
@@ -15,7 +17,8 @@ void	submatrix3(t_m2 *mf, const t_m3 m, const int i, const int j)
 			{
 				if (l != j)
 				{
-					mf->d[k] = m.d[k * 3 + l];
+					mf->d[index] = m.d[k * 3 + l];
+					index++;
 				}
 				l++;
 			}

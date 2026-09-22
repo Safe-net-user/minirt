@@ -5,8 +5,10 @@ void	submatrix4(t_m3 *mf, const t_m4 m, const int i, const int j)
 {
 	int	k;
 	int	l;
+	int	index;
 
 	k = 0;
+	index = 0;
 	while (k < 4)
 	{
 		if (k != i)
@@ -16,7 +18,8 @@ void	submatrix4(t_m3 *mf, const t_m4 m, const int i, const int j)
 			{
 				if (l != j)
 				{
-					mf->d[k] = m.d[k * 4 + l];
+					mf->d[index] = m.d[k * 4 + l];
+					index++;
 				}
 				l++;
 			}

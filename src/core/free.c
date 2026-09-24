@@ -1,5 +1,18 @@
 #include "minirt.h"
 #include "vector.h"
+#include "mlx.h"
+#include <stdlib.h>
+
+#include "../../include/minirt.h"
+
+int	free_mlx_mrt(t_mrt *mrt)
+{
+	mlx_destroy_window(mrt->mlx, mrt->mlx_win);
+	mlx_destroy_display(mrt->mlx);
+	free(mrt->mlx);
+	free_mrt(mrt);
+	exit(0);
+}
 
 void	free_mrt(t_mrt *mrt)
 {

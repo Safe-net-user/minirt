@@ -42,5 +42,6 @@ void	transpose_matrices4(t_m4 *fm, t_m4 m);
 double	compute_minor4(t_m4 m, int i, int j);
 double	compute_cofactors4(t_m4 m, int i, int j);
 double	compute_determinant4(t_m4 m);
+void	invert_matrix4(t_m4 *fm, const t_m4 m);
 
 #endif //MATRIX4_H

@@ -3,6 +3,8 @@
 #include "vector.h"
 #include "types.h"
 #include "shapes.h"
+#include "mlx.h"
+#include "../../include/macros.h"
 
 static int	init_sphere(t_sphere *s)
 {
@@ -57,6 +59,8 @@ static int	init_cylinder(t_cylinder *c)
 
 int	init_minirt(t_mrt *mrt)
 {
+	mrt->mlx = mlx_init();
+	mrt->mlx_win = mlx_new_window(mrt->mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "miniRT");
 	if (init_sphere(&mrt->sphere))
 	{
 		free_mrt(mrt);

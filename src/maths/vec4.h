@@ -71,7 +71,7 @@ static inline __attribute__((always_inline)) double	compute_dot(const t_vec4 v1,
 	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w);
 }
 
-static inline __attribute__((always_inline)) t_vec4	*compute_cross(t_vec4 *vf, const t_vec4 v1, const t_vec4 v2)
+static inline __attribute__((always_inline)) void	compute_cross(t_vec4 *vf, const t_vec4 v1, const t_vec4 v2)
 {
 	set_vec4(
 		vf,
@@ -79,7 +79,6 @@ static inline __attribute__((always_inline)) t_vec4	*compute_cross(t_vec4 *vf, c
 		v1.z * v2.x - v1.x * v2.z,
 		v1.x * v2.y - v1.y * v2.x
 		);
-	return (vf);
 }
 
 #endif //VEC4_H

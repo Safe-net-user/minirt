@@ -14,11 +14,13 @@
 #endif
 
 #ifndef WINDOW_WIDTH
-# define WINDOW_WIDTH 4096
+# define WINDOW_WIDTH 1920
 #endif
 
 #ifndef WINDOW_HEIGHT
-# define Window_HEIGHT 2048
+# define WINDOW_HEIGHT 1080
 #endif
+
+# define ESC_KEY 65307
 
 #endif //MACROS_H

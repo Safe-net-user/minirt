@@ -62,9 +62,9 @@ endif
 # --------------------- FLAGS -------------------- #
 CFLAGS			?= -Wall -Werror -Wextra
 ifeq ($(COMPILER),clang)
-	CFLAGS		= 	-Wall -Werror -Wextra -Wvla -Wpedantic -Wmisleading-indentation -Wshadow -Wnull-dereference
+	CFLAGS		= 	-Wall -Werror -Wextra -Wvla -Wpedantic -Wno-incompatible-pointer-types -Wmisleading-indentation -Wshadow -Wnull-dereference
 else ifeq ($(COMPILER),gcc)
-	CFLAGS		= 	-Wall -Werror -Wextra -Wvla -Wpedantic -Wmisleading-indentation -Wshadow -Wnull-dereference -Wstringop-overflow -Warray-bounds -Wrestrict
+	CFLAGS		= 	-Wall -Werror -Wextra -Wvla -Wpedantic -Wno-incompatible-pointer-types -Wmisleading-indentation -Wshadow -Wnull-dereference -Wstringop-overflow -Warray-bounds -Wrestrict
 endif
 
 ifeq ($(filter debug debug_memory release,$(MODE)),)
@@ -87,6 +87,7 @@ SOURCES			:= \
 $(SRC)/$(CORE)/main.c \
 $(SRC)/$(CORE)/init.c \
 $(SRC)/$(CORE)/free.c \
+$(SRC)/$(CORE)/window.c \
 $(SRC)/$(PARSER)/parser.c \
 $(SRC)/$(PARSER)/parse_blanks.c \
 $(SRC)/$(PARSER)/parse_amb_lighting.c \

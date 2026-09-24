@@ -4,7 +4,6 @@
 #include "types.h"
 #include "shapes.h"
 #include "mlx.h"
-#include "../../include/macros.h"
 
 static int	init_sphere(t_sphere *s)
 {

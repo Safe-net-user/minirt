@@ -10,12 +10,6 @@ typedef struct s_matrix4
 	double	d[16];
 }	t_m4;
 
-static inline __attribute__((always_inline)) void	set_matrix4(t_m4 *m, const __m512d a, const __m512d b)
-{
-	_mm512_storeu_pd(m->d, a);
-	_mm512_storeu_pd(&m->d[8], b);
-}
-
 static inline __attribute__((always_inline)) void	mul_matrix4_by_point(t_point *fp, const t_point p, const t_m4 m)
 {
 	set_point(

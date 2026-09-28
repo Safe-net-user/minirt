@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "maths.h"
+#include "../../../src/maths/transformations.h"
 
 #define EPSILON 1e-9
 
@@ -421,7 +422,6 @@ static int	test_submatrix4(void)
 		failed += test_matrix("submatrix4 (1,1)",
 			got.d, expected, 9);
 	}
-
 	submatrix4(&got, m, 2, 2);
 	{
 		double expected[] = {
@@ -432,7 +432,6 @@ static int	test_submatrix4(void)
 		failed += test_matrix("submatrix4 (2,2)",
 			got.d, expected, 9);
 	}
-
 	submatrix4(&got, m, 3, 0);
 	{
 		double expected[] = {
@@ -443,7 +442,6 @@ static int	test_submatrix4(void)
 		failed += test_matrix("submatrix4 (3,0)",
 			got.d, expected, 9);
 	}
-
 	return (failed);
 }
 
@@ -655,6 +653,48 @@ static int	test_matrix4_determinants(void)
 
 /*
 ** ============================================================
+** INVERSE
+** ============================================================
+*/
+
+static int	test_inverse4()
+{
+	t_m4	m;
+	t_m4	got;
+	int		failed;
+
+	failed = 0;
+	printf("\n  -- 4x4 inverse --\n");
+	m.d[0] = -5.0;
+	m.d[1] = 2.0;
+	m.d[2] = 6.0;
+	m.d[3] = -8.0;
+	m.d[4] = 1.0;
+	m.d[5] = -5.0;
+	m.d[6] = 1.0;
+	m.d[7] = 8.0;
+	m.d[8] = 7.0;
+	m.d[9] = 7.0;
+	m.d[10] = -6.0;
+	m.d[11] = -7.0;
+	m.d[12] = 1.0;
+	m.d[13] = -3.0;
+	m.d[14] = 7.0;
+	m.d[15] = 4.0;
+
+	invert_matrix4(&got, m);
+	double expected[] = {
+		0.218045112782, 0.451127819549, 0.240601503759, -0.045112781955,
+		-0.808270676692, -1.456766917293, -0.443609022556, 0.520676691729,
+		-0.078947368421, -0.223684210526, -0.052631578947, 0.197368421053,
+		-0.522556390977, -0.813909774436, -0.300751879699, 0.306390977444,
+	};
+	failed += test_matrix("invert matrix 4x4", got.d, expected, 16);
+	return (failed);
+}
+
+/*
+** ============================================================
 ** TRANSPOSE
 ** ============================================================
 */
@@ -686,8 +726,6 @@ static int	test_transpose4(void)
 	m.d[15] = 16;
 
 	transpose_matrices4(&got, m);
-
-	{
 		double expected[] = {
 			1, 5, 9, 13,
 			2, 6, 10, 14,
@@ -697,7 +735,6 @@ static int	test_transpose4(void)
 
 		failed += test_matrix("transpose4",
 			got.d, expected, 16);
-	}
 
 	return (failed);
 }
@@ -857,6 +894,7 @@ int	run_matrix_tests(void)
 	failed += test_matrix4_determinants();
 
 	failed += test_transpose4();
+	failed += test_inverse4();
 	failed += test_matrix4_multiplication();
 	failed += test_identity_multiplication();
 
@@ -1133,12 +1171,292 @@ int	run_point_tests(void)
 	return (failed);
 }
 
+int	test_transformation_translation(void)
+{
+	int	failed;
+	t_m4	m;
+	t_point	p;
+	t_point	got;
+
+	t_m4 translated_matrix4 = (t_m4){
+		.d = {
+			1.0, 0.0, 0.0, 2.0,
+			0.0, 1.0, 0.0, 3.0,
+			0.0, 0.0, 1.0, 4.0,
+			0.0, 0.0, 0.0, 1.0
+		}
+	};
+	failed = 0;
+	printf("\n  -- translation transformation tests --\n");
+	translation_matrix4(&m, (struct s_data){.x = 2.0, .y = 3.0, .z = 4.0});
+	test_matrix("translation matrix 4x4", m.d, translated_matrix4.d, 16);
+	set_point(&p, -3, 4, 5);
+	mul_translation_matrix(&got, p, (struct s_data){.x = 5, .y = -3, .z = 2});
+	printf("\n  -- translation transformation tests --\n");
+	printf("multiplying by a translation matrix: \n");
+	failed += test_double("x", got.x, 2.0);
+	failed += test_double("y", got.y, 1.0);
+	failed += test_double("z", got.z, 7.0);
+	printf("multiplying by the inverse of a translation matrix: \n");
+	mul_inv_translation_matrix(&got, p, (struct s_data){.x = 5, .y = -3, .z = 2});
+	failed += test_double("x", got.x, -8.0);
+	failed += test_double("y", got.y, 7.0);
+	failed += test_double("z", got.z, 3.0);
+	return (failed);
+}
+
+int	test_transformation_scaling(void)
+{
+	t_m4	m;
+	t_m4	scaled_matrix4;
+	t_m4	inv;
+	t_point	got_point;
+	t_point	p;
+	t_vec4	got_vector;
+	t_vec4	v;
+	int		failed;
+
+	failed = 0;
+	printf("\n  -- scaling transformation tests --\n");
+	scaling_matrix4(&m, (struct s_data){.x = 2, .y = 3, .z = 4});
+	scaled_matrix4 = (t_m4){
+		.d = {
+			2.0, 0.0, 0.0, 0.0,
+			0.0, 3.0, 0.0, 0.0,
+			0.0, 0.0, 4.0, 0.0,
+			0.0, 0.0, 0.0, 1.0
+		}
+	};
+	failed = test_matrix("scale matrix 4x4", m.d, scaled_matrix4.d, 16);
+
+	printf("A scaling matrix applied to a point\n");
+	set_point(&p, -4, 6, 8);
+	mul_matrix4_by_point(&got_point, p, m);
+	failed += test_double("x", got_point.x, -8.0);
+	failed += test_double("y", got_point.y, 18.0);
+	failed += test_double("z", got_point.z, 32.0);
+
+	printf("A scaling matrix applied to a vector\n");
+	set_vec4(&v, -4, 6, 8);
+	mul_matrix4_by_vector(&got_vector, v, m);
+	failed += test_double("x", got_vector.x, -8.0);
+	failed += test_double("y", got_vector.y, 18.0);
+	failed += test_double("z", got_vector.z, 32.0);
+
+	printf("Multiplying by the inverse of a scaling matrix\n");
+	invert_matrix4(&inv, m);
+	mul_matrix4_by_vector(&got_vector, v, inv);
+	failed += test_double("x", got_vector.x, -2.0);
+	failed += test_double("y", got_vector.y, 2.0);
+	failed += test_double("z", got_vector.z, 2.0);
+	return (failed);
+}
+
+int	test_transformation_rotate_x(void)
+{
+	t_point	p;
+	t_point	got_half_quarter;
+	t_point	got_full_quarter;
+	t_point	got_half_quarter_inv;
+	t_m4	half_quarter;
+	t_m4	full_quarter;
+	t_m4	inv;
+
+	int	failed;
+
+	failed = 0;
+	printf("\n  -- rotation x transformation tests --\n");
+	set_point(&p, 0.0, 1.0, 0.0);
+	rotation_x(&half_quarter, M_PI / 4);
+	rotation_x(&full_quarter, M_PI / 2);
+	mul_matrix4_by_point(&got_half_quarter, p, half_quarter);
+	mul_matrix4_by_point(&got_full_quarter, p, full_quarter);
+	invert_matrix4(&inv, half_quarter);
+	mul_matrix4_by_point(&got_half_quarter_inv, p, inv);
+
+	printf("\nrotating a point around the x axis with a half quarter\n");
+	failed += test_double("x", got_half_quarter.x, 0.0);
+	failed += test_double("y", got_half_quarter.y, sqrt(2) / 2);
+	failed += test_double("z", got_half_quarter.z, sqrt(2) / 2);
+
+	printf("\nrotating a point around the x axis with a full quarter\n");
+	failed += test_double("x", got_full_quarter.x, 0.0);
+	failed += test_double("y", got_full_quarter.y, 0.0);
+	failed += test_double("z", got_full_quarter.z, 1.0);
+
+	printf("\nThe inverse of an x-rotation rotates in the opposite direction with half quarter\n");
+	failed += test_double("x", got_half_quarter_inv.x, 0.0);
+	failed += test_double("y", got_half_quarter_inv.y, sqrt(2)/2);
+	failed += test_double("z", got_half_quarter_inv.z, -(sqrt(2)/2));
+
+	return (failed);
+}
+
+int	test_transformation_rotate_y(void)
+{
+	t_point	p;
+	t_point	got_half_quarter;
+	t_point	got_full_quarter;
+	t_point	got_half_quarter_inv;
+	t_m4	half_quarter;
+	t_m4	full_quarter;
+	t_m4	inv;
+
+	int	failed;
+
+	failed = 0;
+	printf("\n  -- rotation y transformation tests --\n");
+	set_point(&p, 0.0, 0.0, 1.0);
+	rotation_y(&half_quarter, M_PI / 4);
+	rotation_y(&full_quarter, M_PI / 2);
+	mul_matrix4_by_point(&got_half_quarter, p, half_quarter);
+	mul_matrix4_by_point(&got_full_quarter, p, full_quarter);
+	invert_matrix4(&inv, half_quarter);
+	mul_matrix4_by_point(&got_half_quarter_inv, p, inv);
+
+	printf("\nrotating a point around the y axis with a half quarter\n");
+	failed += test_double("x", got_half_quarter.x, sqrt(2) / 2);
+	failed += test_double("y", got_half_quarter.y, 0.0);
+	failed += test_double("z", got_half_quarter.z, sqrt(2) / 2);
+
+	printf("\nrotating a point around the y axis with a full quarter\n");
+	failed += test_double("x", got_full_quarter.x, 1.0);
+	failed += test_double("y", got_full_quarter.y, 0.0);
+	failed += test_double("z", got_full_quarter.z, 0.0);
+
+	return (failed);
+}
+
+int	test_transformation_rotate_z(void)
+{
+	t_point	p;
+	t_point	got_half_quarter;
+	t_point	got_full_quarter;
+	t_point	got_half_quarter_inv;
+	t_m4	half_quarter;
+	t_m4	full_quarter;
+	t_m4	inv;
+
+	int	failed;
+
+	failed = 0;
+	printf("\n  -- rotation z transformation tests --\n");
+	set_point(&p, 0.0, 1.0, 0.0);
+	rotation_z(&half_quarter, M_PI / 4);
+	rotation_z(&full_quarter, M_PI / 2);
+	mul_matrix4_by_point(&got_half_quarter, p, half_quarter);
+	mul_matrix4_by_point(&got_full_quarter, p, full_quarter);
+	invert_matrix4(&inv, half_quarter);
+	mul_matrix4_by_point(&got_half_quarter_inv, p, inv);
+
+	printf("\nrotating a point around the z axis with a half quarter\n");
+	failed += test_double("x", got_half_quarter.x, -(sqrt(2) / 2));
+	failed += test_double("y", got_half_quarter.y, sqrt(2) / 2);
+	failed += test_double("z", got_half_quarter.z, 0.0);
+
+	printf("\nrotating a point around the z axis with a full quarter\n");
+	failed += test_double("x", got_full_quarter.x, -1.0);
+	failed += test_double("y", got_full_quarter.y, 0.0);
+	failed += test_double("z", got_full_quarter.z, 0.0);
+
+	return (failed);
+}
+
+int	test_transformation_shearing(void)
+{
+	t_point	got;
+	t_point	p;
+	t_m4	m;
+	int	failed;
+
+	failed = 0;
+	printf("\n  -- shearing transformation tests --\n");
+	shearing_matrix4(&m, (struct s_data_shearing){.xy = 10.0, .xz = 11.0, .yx = 12.0, .yz = 13.0, .zx = 14.0, .zy = 15.0});
+	t_m4 expected = (t_m4){
+		.d = {
+			1.0, 10.0, 11.0, 0.0,
+			12.0, 1.0, 13.0, 0.0,
+			14.0, 15.0, 1.0, 0.0,
+			0.0, 0.0, 0.0, 1.0
+		}
+	};
+	failed += test_matrix("shearing matrix 4x4", m.d, expected.d, 16);
+
+	set_point(&p, 2.0, 3.0, 4.0);
+
+	printf("\nA shearing transformation moves x in proportion to y\n");
+	shearing_matrix4(&m, (struct s_data_shearing){.xy = 1.0, .xz = 0.0, .yx = 0.0, .yz = 0.0, .zx = 0.0, .zy = 0.0});
+	mul_matrix4_by_point(&got, p, m);
+	failed += test_double("x", got.x, 5.0);
+	failed += test_double("y", got.y, 3.0);
+	failed += test_double("z", got.z, 4.0);
+
+	printf("\nA shearing transformation moves x in proportion to z\n");
+	shearing_matrix4(&m, (struct s_data_shearing){.xy = 0.0, .xz = 1.0, .yx = 0.0, .yz = 0.0, .zx = 0.0, .zy = 0.0});
+	mul_matrix4_by_point(&got, p, m);
+	failed += test_double("x", got.x, 6.0);
+	failed += test_double("y", got.y, 3.0);
+	failed += test_double("z", got.z, 4.0);
+
+	printf("\nA shearing transformation moves y in proportion to x\n");
+	shearing_matrix4(&m, (struct s_data_shearing){.xy = 0.0, .xz = 0.0, .yx = 1.0, .yz = 0.0, .zx = 0.0, .zy = 0.0});
+	mul_matrix4_by_point(&got, p, m);
+	failed += test_double("x", got.x, 2.0);
+	failed += test_double("y", got.y, 5.0);
+	failed += test_double("z", got.z, 4.0);
+
+	printf("\nA shearing transformation moves y in proportion to z\n");
+	shearing_matrix4(&m, (struct s_data_shearing){.xy = 0.0, .xz = 0.0, .yx = 0.0, .yz = 1.0, .zx = 0.0, .zy = 0.0});
+	mul_matrix4_by_point(&got, p, m);
+	failed += test_double("x", got.x, 2.0);
+	failed += test_double("y", got.y, 7.0);
+	failed += test_double("z", got.z, 4.0);
+
+	printf("\nA shearing transformation moves z in proportion to x\n");
+	shearing_matrix4(&m, (struct s_data_shearing){.xy = 0.0, .xz = 0.0, .yx = 0.0, .yz = 0.0, .zx = 1.0, .zy = 0.0});
+	mul_matrix4_by_point(&got, p, m);
+	failed += test_double("x", got.x, 2.0);
+	failed += test_double("y", got.y, 3.0);
+	failed += test_double("z", got.z, 6.0);
+
+	printf("\nA shearing transformation moves z in proportion to y\n");
+	shearing_matrix4(&m, (struct s_data_shearing){.xy = 0.0, .xz = 0.0, .yx = 0.0, .yz = 0.0, .zx = 0.0, .zy = 1.0});
+	mul_matrix4_by_point(&got, p, m);
+	failed += test_double("x", got.x, 2.0);
+	failed += test_double("y", got.y, 3.0);
+	failed += test_double("z", got.z, 7.0);
+
+	return (failed);
+}
+
+int	run_transformation_tests(void)
+{
+	int	failed;
+
+	failed = 0;
+	printf("[TRANSFORMATION TESTS]\n");
+
+	failed += test_transformation_translation();
+	failed += test_transformation_scaling();
+	failed += test_transformation_rotate_x();
+	failed += test_transformation_rotate_y();
+	failed += test_transformation_rotate_z();
+	failed += test_transformation_shearing();
+
+	if (failed == 0)
+		printf("\n  >>> ALL TRANSFORMATION TESTS PASSED <<<\n");
+	else
+		printf("\n  >>> %d TRANSFORMATION TEST(S) FAILED <<<\n", failed);
+
+	return (failed);
+}
 
 int	main(void)
 {
 	int	vector_failed;
 	int	point_failed;
 	int	matrix_failed;
+	int	transformations_failed;
 
 	printf("\n");
 	printf("========================================\n");
@@ -1148,10 +1466,11 @@ int	main(void)
 	vector_failed = run_vector_tests();
 	point_failed = run_point_tests();
 	matrix_failed = run_matrix_tests();
+	transformations_failed = run_transformation_tests();
 
 	printf("\n========================================\n");
 
-	if (vector_failed == 0 && point_failed == 0 && matrix_failed == 0)
+	if (vector_failed == 0 && point_failed == 0 && matrix_failed == 0 && transformations_failed == 0)
 		printf("             ALL TESTS PASSED           \n");
 	else
 		printf("             TESTS FAILED              \n");
@@ -1160,5 +1479,6 @@ int	main(void)
 
 	return (vector_failed != 0
 		|| point_failed != 0
-		|| matrix_failed != 0);
+		|| matrix_failed != 0
+		|| transformations_failed != 0);
 }

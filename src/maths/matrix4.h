@@ -1,7 +1,7 @@
 #ifndef MATRIX4_H
 #define MATRIX4_H
 
-#include "../point.h"
+#include "point.h"
 #include "matrix3.h"
 #include <immintrin.h>
 

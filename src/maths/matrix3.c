@@ -1,4 +1,4 @@
-#include "matrix3.h"
+#include "matrix/matrix3.h"
 
 void	submatrix3(t_m2 *mf, const t_m3 m, const int i, const int j)
 {

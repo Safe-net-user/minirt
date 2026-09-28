@@ -6,5 +6,6 @@
 # include "../src/maths/matrix/matrix4.h"
 # include "../src/maths/point.h"
 # include "../src/maths/vec4.h"
+# include "../src/maths/transformations.h"
 
 #endif //MATHS_H

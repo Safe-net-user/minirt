@@ -25,9 +25,7 @@ static int	parser_fsm(t_mrt *mrt, unsigned char *fb)
 	set_lut(lut);
 	set_parser(&p, mrt, fb);
 	while (p.str[p.index] && !code_status)
-	{
 		code_status = lut[p.str[p.index]](&p);
-	}
 	if (code_status)
 	{
 		p.code_status = code_status;

@@ -112,4 +112,10 @@ static inline __attribute__((always_inline)) void	shearing_matrix4(t_m4 *m, cons
 	m->d[15] = 1.0;
 }
 
+void	mul_inv_translation_matrix(t_point *fp, const t_point p, const struct s_data xyz);
+void	mul_inv_scaling_matrix(t_vec4 *fv, const t_vec4 v, const struct s_data xyz);
+void	rotation_x(t_m4 *mf, const double r);
+void	rotation_y(t_m4 *mf, const double r);
+void	rotation_z(t_m4 *mf, const double r);
+
 #endif //TRANSFORMATIONS_H

@@ -94,8 +94,8 @@ void	mul_matrices4(t_m4 *fm, const t_m4 m1, const t_m4 m2)
 void	invert_matrix4(t_m4 *fm, const t_m4 m)
 {
 	double	det;
-	int		i;
-	int		j;
+	int		row;
+	int		col;
 
 	if (!compute_determinant4(m))
 	{
@@ -103,15 +103,15 @@ void	invert_matrix4(t_m4 *fm, const t_m4 m)
 		return ;
 	}
 	det = compute_determinant4(m);
-	i = 0;
-	while (i < 4)
+	row = 0;
+	while (row < 4)
 	{
-		j = 0;
-		while (j < 4)
+		col = 0;
+		while (col < 4)
 		{
-			fm->d[i + j] = compute_cofactors4(m, j, i) / det;
-			j++;
+			fm->d[col * 4 + row] = 	compute_cofactors4(m, row, col) / det;
+			col++;
 		}
-		i++;
+		row++;
 	}
 }

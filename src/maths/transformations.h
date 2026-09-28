@@ -2,7 +2,7 @@
 # define TRANSFORMATIONS_H
 
 #include "point.h"
-#include "matrix/matrix4.h"
+#include "matrix4.h"
 
 typedef struct s_scaling
 {

@@ -98,6 +98,7 @@ $(SRC)/$(PARSER)/parse_plane.c \
 $(SRC)/$(PARSER)/parse_sphere.c \
 $(SRC)/$(PARSER)/parser_set.c \
 $(SRC)/$(PARSER)/parser_utils.c \
+$(SRC)/$(MATHS)/transformations.c \
 $(SRC)/$(MATHS)/matrix/matrix3.c \
 $(SRC)/$(MATHS)/matrix/matrix4.c \
 

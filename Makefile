@@ -32,6 +32,9 @@ EXM					:= example
 CORE				:= core
 PARSER				:= parser
 MATHS				:= maths
+PHYSIC				:= physic
+SHAPE				:= shape
+WINDOW				:= window
 
 # LIB SUB-DIRECTORIES
 LIBFT				:= libft
@@ -84,10 +87,8 @@ LDLIBS			:= -lm -lft -lmlx -lXext -lX11
 
 # --------------------- FILES --------------------- #
 SOURCES			:= \
-$(SRC)/$(CORE)/main.c \
-$(SRC)/$(CORE)/init.c \
-$(SRC)/$(CORE)/free.c \
-$(SRC)/$(CORE)/window.c \
+$(SRC)/main.c \
+$(SRC)/$(CORE)/raytracer.c \
 $(SRC)/$(PARSER)/parser.c \
 $(SRC)/$(PARSER)/parse_blanks.c \
 $(SRC)/$(PARSER)/parse_amb_lighting.c \
@@ -101,6 +102,13 @@ $(SRC)/$(PARSER)/parser_utils.c \
 $(SRC)/$(MATHS)/transformations.c \
 $(SRC)/$(MATHS)/matrix3.c \
 $(SRC)/$(MATHS)/matrix4.c \
+$(SRC)/$(PHYSIC)/intersection.c \
+$(SRC)/$(SHAPE)/cylinder.c \
+$(SRC)/$(SHAPE)/free_shape.c \
+$(SRC)/$(SHAPE)/init_shape.c \
+$(SRC)/$(SHAPE)/plane.c \
+$(SRC)/$(SHAPE)/sphere.c \
+$(SRC)/$(WINDOW)/window_utils.c \
 
 # -------------------- OBJECTS -------------------- #
 OBJECTS			:= $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))

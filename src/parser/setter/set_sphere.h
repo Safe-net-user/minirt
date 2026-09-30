@@ -26,4 +26,4 @@ static inline void	set_sphere_color(t_sr *sr, unsigned int r, unsigned int g, un
 	push_back_vector(sr->b, &b);
 }
 
-#endif //MINIRT_SET_SPHERE_H
+#endif //SET_SPHERE_H

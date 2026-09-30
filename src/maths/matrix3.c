@@ -1,10 +1,11 @@
-#include "matrix/matrix3.h"
+#include "matrix3.h"
 
-void	submatrix3(t_m2 *mf, const t_m3 m, const int i, const int j)
+t_m2	submatrix3(const t_m3 m, const int i, const int j)
 {
-	int	k;
-	int	l;
-	int	index;
+	t_m2	m2;
+	int		k;
+	int		l;
+	int		index;
 
 	index = 0;
 	k = 0;
@@ -17,7 +18,7 @@ void	submatrix3(t_m2 *mf, const t_m3 m, const int i, const int j)
 			{
 				if (l != j)
 				{
-					mf->d[index] = m.d[k * 3 + l];
+					m2.d[index] = m.d[k * 3 + l];
 					index++;
 				}
 				l++;
@@ -25,19 +26,17 @@ void	submatrix3(t_m2 *mf, const t_m3 m, const int i, const int j)
 		}
 		k++;
 	}
+	return (m2);
 }
 
-double	compute_minor3(const t_m3 m, const int i, const int j)
+float	compute_minor3(const t_m3 m, const int i, const int j)
 {
-	t_m2	m2;
-
-	submatrix3(&m2, m, i, j);
-	return (compute_determinant_matrix2(m2));
+	return (compute_determinant_matrix2(submatrix3(m, i, j)));
 }
 
-double	compute_cofactors3(const t_m3 m, const int i, const int j)
+float	compute_cofactors3(const t_m3 m, const int i, const int j)
 {
-	double	minor;
+	float	minor;
 
 	minor = compute_minor3(m, i, j);
 	if ((i + j) % 2)
@@ -45,7 +44,7 @@ double	compute_cofactors3(const t_m3 m, const int i, const int j)
 	return (minor);
 }
 
-double	compute_determinant3(const t_m3 m)
+float	compute_determinant3(const t_m3 m)
 {
 	return (m.d[0] * compute_cofactors3(m, 0, 0) + m.d[1] * compute_cofactors3(m, 0, 1) + m.d[2] * compute_cofactors3(m, 0, 2));
 }

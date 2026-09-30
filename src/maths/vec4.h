@@ -5,80 +5,65 @@
 
 typedef struct s_vec4
 {
-	double	x;
-	double	y;
-	double	z;
-	double	w;
+	float	x;
+	float	y;
+	float	z;
+	float	w;
 }	t_vec4;
 
-static  inline __attribute__((__always_inline__)) void set_vec4(t_vec4 *v, const double x, const double y, const double z)
+static  inline __attribute__((__always_inline__)) t_vec4 set_vec4(const float x, const float y, const float z)
 {
-	v->x = x;
-	v->y = y;
-	v->z = z;
-	v->w = 0.0;
+	return ((t_vec4){x, y, z, 0.0});
 }
 
-static inline __attribute__((__always_inline__)) void	add_vectors(t_vec4 *fv, const t_vec4 v1, const t_vec4 v2)
+static inline __attribute__((__always_inline__)) t_vec4	add_vectors(const t_vec4 v1, const t_vec4 v2)
 {
-	fv->x = v1.x + v2.x;
-	fv->y = v1.y + v2.y;
-	fv->z = v1.z + v2.z;
-	fv->w = v1.w + v2.w;
+	return ((t_vec4){v1.x + v2.x, v1.y + v2.y, v1.z + v2.z,v1.w + v2.w});
 }
 
-static inline __attribute__((__always_inline__)) void	sub_vectors(t_vec4 *fv, const t_vec4 v1, const t_vec4 v2)
+static inline __attribute__((__always_inline__)) t_vec4	sub_vectors(const t_vec4 v1, const t_vec4 v2)
 {
-	fv->x = v1.x - v2.x;
-	fv->y = v1.y - v2.y;
-	fv->z = v1.z - v2.z;
-	fv->w = v1.w - v2.w;
+	return ((t_vec4){v1.x - v2.x, v1.y - v2.y, v1.z - v2.z, v1.w - v2.w});
 }
 
-static inline __attribute__((__always_inline__)) void	negate_vector(t_vec4 *v)
+static inline __attribute__((__always_inline__)) t_vec4	negate_vector(const t_vec4 v)
 {
-	v->x = -v->x;
-	v->y = -v->y;
-	v->z = -v->z;
-	v->w = -v->w;
+	return ((t_vec4){-v.x, -v.y, -v.z, -v.w});
 }
 
-static inline __attribute__((always_inline)) void	mul_vector(t_vec4 *v, const double s)
+static inline __attribute__((always_inline)) t_vec4	mul_vector(const t_vec4 v, const float s)
 {
-	v->x *= s;
-	v->y *= s;
-	v->z *= s;
-	v->w *= s;
+	return ((t_vec4){v.x * s, v.y * s, v.z * s, v.w * s});
 }
 
-static inline __attribute__((always_inline)) double	compute_magnitude(const t_vec4 v)
+static inline __attribute__((always_inline)) float	compute_magnitude(const t_vec4 v)
 {
 	return (sqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w));
 }
 
-static inline __attribute__((always_inline)) void	normalize_vector(t_vec4 *v, const double magnitude)
+static inline __attribute__((always_inline)) t_vec4	normalize_vector(const t_vec4 v, const float magnitude)
 {
-	double	s;
+	float	s;
 
 	if (!magnitude || magnitude == 1.0)
-		return ;
+		return (v);
 	s = 1.0 / magnitude;
-	mul_vector(v, s);
+	return (mul_vector(v, s));
 }
 
-static inline __attribute__((always_inline)) double	compute_dot(const t_vec4 v1, const t_vec4 v2)
+static inline __attribute__((always_inline)) float	compute_dot(const t_vec4 v1, const t_vec4 v2)
 {
 	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z + v1.w * v2.w);
 }
 
-static inline __attribute__((always_inline)) void	compute_cross(t_vec4 *vf, const t_vec4 v1, const t_vec4 v2)
+static inline __attribute__((always_inline)) t_vec4	compute_cross(const t_vec4 v1, const t_vec4 v2)
 {
-	set_vec4(
-		vf,
+	return ((t_vec4){
 		v1.y * v2.z - v1.z * v2.y,
 		v1.z * v2.x - v1.x * v2.z,
-		v1.x * v2.y - v1.y * v2.x
-		);
+		v1.x * v2.y - v1.y * v2.x,
+		0.0f
+		});
 }
 
 #endif //VEC4_H

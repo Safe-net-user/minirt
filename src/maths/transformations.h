@@ -6,116 +6,125 @@
 
 typedef struct s_scaling
 {
-	double	x;
-	double	y;
-	double	z;
+	float	x;
+	float	y;
+	float	z;
 }	t_scaling;
 
 struct s_data
 {
-	double	x;
-	double	y;
-	double	z;
+	float	x;
+	float	y;
+	float	z;
 };
 
 struct s_data_shearing
 {
-	double	xy;
-	double	xz;
-	double	yx;
-	double	yz;
-	double	zx;
-	double	zy;
+	float	xy;
+	float	xz;
+	float	yx;
+	float	yz;
+	float	zx;
+	float	zy;
 };
 
-static inline __attribute__((always_inline)) void	translation_matrix4(t_m4 *m, const struct s_data xyz)
+static inline __attribute__((always_inline)) t_m4	translation_matrix4(const struct s_data xyz)
 {
-	m->d[0] = 1.0;
-	m->d[1] = 0.0;
-	m->d[2] = 0.0;
-	m->d[3] = xyz.x;
-	m->d[4] = 0.0;
-	m->d[5] = 1.0;
-	m->d[6] = 0.0;
-	m->d[7] = xyz.y;
-	m->d[8] = 0.0;
-	m->d[9] = 0.0;
-	m->d[10] = 1.0;
-	m->d[11] = xyz.z;
-	m->d[12] = 0.0;
-	m->d[13] = 0.0;
-	m->d[14] = 0.0;
-	m->d[15] = 1.0;
+	return ((t_m4){
+			{
+				1.0,
+				0.0,
+				0.0,
+				xyz.x,
+				0.0,
+				1.0,
+				0.0,
+				xyz.y,
+				0.0,
+				0.0,
+				1.0,
+				xyz.z,
+				0.0,
+				0.0,
+				0.0,
+				1.0
+			}});
 }
 
-static inline __attribute__((always_inline)) void	mul_translation_matrix(t_point *fp, const t_point p, const struct s_data xyz)
+static inline __attribute__((always_inline)) t_point	mul_translation_matrix(const t_point p, const struct s_data xyz)
 {
 	t_m4 translation;
 
-	translation_matrix4(&translation, xyz);
-	mul_matrix4_by_point(fp, p, translation);
+	translation = translation_matrix4(xyz);
+	return (mul_matrix4_by_point(p, translation));
 }
 
-static inline __attribute__((always_inline)) void	scaling_matrix4(t_m4 *m, const struct s_data xyz)
+static inline __attribute__((always_inline)) t_m4	scaling_matrix4(const struct s_data xyz)
 {
-	m->d[0] = xyz.x;
-	m->d[1] = 0.0;
-	m->d[2] = 0.0;
-	m->d[3] = 0.0;
-	m->d[4] = 0.0;
-	m->d[5] = xyz.y;
-	m->d[6] = 0.0;
-	m->d[7] = 0.0;
-	m->d[8] = 0.0;
-	m->d[9] = 0.0;
-	m->d[10] = xyz.z;
-	m->d[11] = 0.0;
-	m->d[12] = 0.0;
-	m->d[13] = 0.0;
-	m->d[14] = 0.0;
-	m->d[15] = 1.0;
+	return ((t_m4) {
+		{
+			xyz.x,
+			0.0,
+			0.0,
+			0.0,
+			0.0,
+			xyz.y,
+			0.0,
+			0.0,
+			0.0,
+			0.0,
+			xyz.z,
+			0.0,
+			0.0,
+			0.0,
+			0.0,
+			1.0
+		}});
 }
 
-static inline __attribute__((always_inline)) void	mul_scaling_matrix_to_point(t_point *fp, const t_point p, const struct s_data xyz)
-{
-	t_m4	scaling;
-
-	scaling_matrix4(&scaling, xyz);
-	mul_matrix4_by_point(fp, p, scaling);
-}
-
-static inline __attribute__((always_inline)) void	mul_scaling_matrix_to_vector(t_vec4 *fv, const t_vec4 v, const struct s_data xyz)
+static inline __attribute__((always_inline)) t_point	mul_scaling_matrix_to_point(const t_point p, const struct s_data xyz)
 {
 	t_m4	scaling;
 
-	scaling_matrix4(&scaling, xyz);
-	mul_matrix4_by_vector(fv, v, scaling);
+	scaling = scaling_matrix4(xyz);
+	return (mul_matrix4_by_point(p, scaling));
 }
 
-static inline __attribute__((always_inline)) void	shearing_matrix4(t_m4 *m, const struct s_data_shearing d)
+static inline __attribute__((always_inline)) t_vec4	mul_scaling_matrix_to_vector(const t_vec4 v, const struct s_data xyz)
 {
-	m->d[0] = 1.0;
-	m->d[1] = d.xy;
-	m->d[2] = d.xz;
-	m->d[3] = 0.0;
-	m->d[4] = d.yx;
-	m->d[5] = 1.0;
-	m->d[6] = d.yz;
-	m->d[7] = 0.0;
-	m->d[8] = d.zx;
-	m->d[9] = d.zy;
-	m->d[10] = 1.0;
-	m->d[11] = 0.0;
-	m->d[12] = 0.0;
-	m->d[13] = 0.0;
-	m->d[14] = 0.0;
-	m->d[15] = 1.0;
+	t_m4	scaling;
+
+	scaling = scaling_matrix4(xyz);
+	return (mul_matrix4_by_vector(v, scaling));
 }
 
-void	mul_inv_translation_matrix(t_point *fp, const t_point p, const struct s_data xyz);
-void	mul_inv_scaling_matrix(t_vec4 *fv, const t_vec4 v, const struct s_data xyz);
-void	rotation_x(t_m4 *mf, const double r);
-void	rotation_y(t_m4 *mf, const double r);
-void	rotation_z(t_m4 *mf, const double r);
+static inline __attribute__((always_inline)) t_m4	shearing_matrix4(const struct s_data_shearing d)
+{
+	return ((t_m4){
+		{
+			1.0,
+			d.xy,
+			d.xz,
+			0.0,
+			d.yx,
+			1.0,
+			d.yz,
+			0.0,
+			d.zx,
+			d.zy,
+			1.0,
+			0.0,
+			0.0,
+			0.0,
+			0.0,
+			1.0
+		}});
+}
+
+t_point	mul_inv_translation_matrix(t_point p, struct s_data xyz);
+t_vec4	mul_inv_scaling_matrix(t_vec4 v, struct s_data xyz);
+t_m4	rotation_x(float r);
+t_m4	rotation_y(float r);
+t_m4	rotation_z(float r);
 
 #endif //TRANSFORMATIONS_H

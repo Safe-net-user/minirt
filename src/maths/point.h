@@ -5,34 +5,30 @@
 
 typedef struct s_point
 {
-	double	x;
-	double	y;
-	double	z;
-	double	w;
+	float	x;
+	float	y;
+	float	z;
+	float	w;
 }	t_point;
 
-static  inline __attribute__((__always_inline__)) void set_point(t_point *p, double x, double y, double z)
+static  inline __attribute__((always_inline)) t_point	set_point(const float x, const float y, const float z)
 {
-	p->x = x;
-	p->y = y;
-	p->z = z;
-	p->w = 1.0;
+	return ((t_point){x, y, z, 1.0});
 }
 
-static inline __attribute__((always_inline)) void	sub_points(t_vec4 *v, const t_point p1, const t_point p2)
+static inline __attribute__((always_inline)) t_point	add_vector_to_point(const t_point p, const t_vec4 v)
 {
-	v->x = p1.x - p2.x;
-	v->y = p1.y - p2.y;
-	v->z = p1.z - p2.z;
-	v->w = p1.w - p2.w;
+	return ((t_point){p.x + v.x,p.y + v.y,p.z + v.z,p.w + v.w});
 }
 
-static inline __attribute__((always_inline)) void	sub_vector_from_point(t_point *fp, const t_vec4 v, const t_point p)
+static inline __attribute__((always_inline)) t_vec4	sub_points(const t_point p1, const t_point p2)
 {
-	fp->x = p.x - v.x;
-	fp->y = p.y - v.y;
-	fp->z = p.z - v.z;
-	fp->w = p.w - v.w;
+	return ((t_vec4){p1.x - p2.x, p1.y - p2.y,p1.z - p2.z, p1.w - p2.w});
+}
+
+static inline __attribute__((always_inline)) t_point	sub_vector_from_point(const t_vec4 v, const t_point p)
+{
+	return ((t_point){p.x - v.x, p.y - v.y, p.z - v.z, p.w - v.w});
 }
 
 #endif //POINT_H

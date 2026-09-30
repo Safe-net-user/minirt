@@ -5,10 +5,10 @@
 
 typedef struct s_matrix2
 {
-	double	d[4];
+	float	d[4];
 }	t_m2;
 
-static inline __attribute__((always_inline)) double	compute_determinant_matrix2(const t_m2 m)
+static inline __attribute__((always_inline)) float	compute_determinant_matrix2(const t_m2 m)
 {
 	return (m.d[0] * m.d[3] - m.d[1] * m.d[2]);
 }

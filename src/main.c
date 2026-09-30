@@ -2,7 +2,6 @@
 #include "ft_stack_alloc.h"
 #include "macros.h"
 #include "mlx.h"
-#include "../include/minirt.h"
 
 int	init_minirt(t_mrt *mrt)
 {

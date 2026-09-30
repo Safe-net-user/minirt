@@ -2,26 +2,12 @@
 #define TYPES_H
 
 #include <stdint.h>
-
-typedef struct t_vec3
-{
-	float	x;
-	float	y;
-	float	z;
-}	t_vec3;
-
-typedef struct t_vec4
-{
-	float	x;
-	float	y;
-	float	z;
-	float	w;
-}	t_vec4;
+#include "maths.h"
 
 typedef struct s_cam
 {
-	t_vec3	direction;
-	t_vec3	coords;
+	t_point	direction;
+	t_point	coords;
 	uint8_t	fov;
 	char	padding[7];
 }	t_cam;
@@ -35,7 +21,7 @@ typedef struct s_amb_light {
 
 typedef struct s_light
 {
-	t_vec3	coords;
+	t_point	coords;
 	float	ratio;
 	uint8_t	r;
 	uint8_t	g;

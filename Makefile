@@ -99,8 +99,8 @@ $(SRC)/$(PARSER)/parse_sphere.c \
 $(SRC)/$(PARSER)/parser_set.c \
 $(SRC)/$(PARSER)/parser_utils.c \
 $(SRC)/$(MATHS)/transformations.c \
-$(SRC)/$(MATHS)/matrix/matrix3.c \
-$(SRC)/$(MATHS)/matrix/matrix4.c \
+$(SRC)/$(MATHS)/matrix3.c \
+$(SRC)/$(MATHS)/matrix4.c \
 
 # -------------------- OBJECTS -------------------- #
 OBJECTS			:= $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))

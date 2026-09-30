@@ -3,9 +3,9 @@
 #include "maths.h"
 #include "../../../src/maths/transformations.h"
 
-#define EPSILON 1e-9
+#define EPSILON 1e-6
 
-static int	test_double(const char *name, double got, double expected)
+static int	test_float(const char *name, float got, float expected)
 {
 	if (fabs(got - expected) > EPSILON)
 	{
@@ -17,8 +17,8 @@ static int	test_double(const char *name, double got, double expected)
 	return (0);
 }
 
-static int	test_matrix(const char *name, const double *got,
-	const double *expected, int n)
+static int	test_matrix(const char *name, const float *got,
+	const float *expected, int n)
 {
 	int	i;
 	int	failed;
@@ -59,7 +59,7 @@ static int	test_matrix2_determinants(void)
 	m.d[1] = 2;
 	m.d[2] = 3;
 	m.d[3] = 4;
-	failed += test_double("2x2 negative", 
+	failed += test_float("2x2 negative", 
 		compute_determinant_matrix2(m), -2.0);
 
 	/* det = 4*3 - (-2)*5 = 22 */
@@ -67,7 +67,7 @@ static int	test_matrix2_determinants(void)
 	m.d[1] = -2;
 	m.d[2] = 5;
 	m.d[3] = 3;
-	failed += test_double("2x2 positive",
+	failed += test_float("2x2 positive",
 		compute_determinant_matrix2(m), 22.0);
 
 	/* det = 1*4 - 2*2 = 0 */
@@ -75,7 +75,7 @@ static int	test_matrix2_determinants(void)
 	m.d[1] = 2;
 	m.d[2] = 2;
 	m.d[3] = 4;
-	failed += test_double("2x2 zero",
+	failed += test_float("2x2 zero",
 		compute_determinant_matrix2(m), 0.0);
 
 	/* det = 0*5 - 7*(-3) = 21 */
@@ -83,7 +83,7 @@ static int	test_matrix2_determinants(void)
 	m.d[1] = 7;
 	m.d[2] = -3;
 	m.d[3] = 5;
-	failed += test_double("2x2 zero pivot",
+	failed += test_float("2x2 zero pivot",
 		compute_determinant_matrix2(m), 21.0);
 
 	return (failed);
@@ -124,9 +124,9 @@ static int	test_submatrix3(void)
 	** -> 5 6
 	**    8 9
 	*/
-	submatrix3(&got, m, 0, 0);
+	got = submatrix3(m, 0, 0);
 	{
-		double expected[] = {5, 6, 8, 9};
+		float expected[] = {5, 6, 8, 9};
 		failed += test_matrix("submatrix3 (0,0)",
 			got.d, expected, 4);
 	}
@@ -137,9 +137,9 @@ static int	test_submatrix3(void)
 	** -> 4 6
 	**    7 9
 	*/
-	submatrix3(&got, m, 0, 1);
+	got = submatrix3(m, 0, 1);
 	{
-		double expected[] = {4, 6, 7, 9};
+		float expected[] = {4, 6, 7, 9};
 		failed += test_matrix("submatrix3 (0,1)",
 			got.d, expected, 4);
 	}
@@ -150,9 +150,9 @@ static int	test_submatrix3(void)
 	** -> 4 5
 	**    7 8
 	*/
-	submatrix3(&got, m, 0, 2);
+	got = submatrix3(m, 0, 2);
 	{
-		double expected[] = {4, 5, 7, 8};
+		float expected[] = {4, 5, 7, 8};
 		failed += test_matrix("submatrix3 (0,2)",
 			got.d, expected, 4);
 	}
@@ -164,9 +164,9 @@ static int	test_submatrix3(void)
 	** -> 8 9
 	**
 	*/
-	submatrix3(&got, m, 1, 0);
+	got = submatrix3(m, 1, 0);
 	{
-		double expected[] = {2, 3, 8, 9};
+		float expected[] = {2, 3, 8, 9};
 		failed += test_matrix("submatrix3 (1,0)",
 			got.d, expected, 4);
 	}
@@ -176,9 +176,9 @@ static int	test_submatrix3(void)
 	** -> 1 3
 	**    7 9
 	*/
-	submatrix3(&got, m, 1, 1);
+	got = submatrix3(m, 1, 1);
 	{
-		double expected[] = {1, 3, 7, 9};
+		float expected[] = {1, 3, 7, 9};
 		failed += test_matrix("submatrix3 (1,1)",
 			got.d, expected, 4);
 	}
@@ -189,9 +189,9 @@ static int	test_submatrix3(void)
 	** -> 2 3
 	**    5 6
 	*/
-	submatrix3(&got, m, 2, 0);
+	got = submatrix3(m, 2, 0);
 	{
-		double expected[] = {2, 3, 5, 6};
+		float expected[] = {2, 3, 5, 6};
 		failed += test_matrix("submatrix3 (2,0)",
 			got.d, expected, 4);
 	}
@@ -231,17 +231,17 @@ static int	test_matrix3_minors(void)
 	m.d[7] = 6;
 	m.d[8] = 0;
 
-	failed += test_double("M00", compute_minor3(m, 0, 0), -24);
-	failed += test_double("M01", compute_minor3(m, 0, 1), -20);
-	failed += test_double("M02", compute_minor3(m, 0, 2), -5);
+	failed += test_float("M00", compute_minor3(m, 0, 0), -24);
+	failed += test_float("M01", compute_minor3(m, 0, 1), -20);
+	failed += test_float("M02", compute_minor3(m, 0, 2), -5);
 
-	failed += test_double("M10", compute_minor3(m, 1, 0), -18);
-	failed += test_double("M11", compute_minor3(m, 1, 1), -15);
-	failed += test_double("M12", compute_minor3(m, 1, 2), -4);
+	failed += test_float("M10", compute_minor3(m, 1, 0), -18);
+	failed += test_float("M11", compute_minor3(m, 1, 1), -15);
+	failed += test_float("M12", compute_minor3(m, 1, 2), -4);
 
-	failed += test_double("M20", compute_minor3(m, 2, 0), 5);
-	failed += test_double("M21", compute_minor3(m, 2, 1), 4);
-	failed += test_double("M22", compute_minor3(m, 2, 2), 1);
+	failed += test_float("M20", compute_minor3(m, 2, 0), 5);
+	failed += test_float("M21", compute_minor3(m, 2, 1), 4);
+	failed += test_float("M22", compute_minor3(m, 2, 2), 1);
 
 	return (failed);
 }
@@ -272,17 +272,17 @@ static int	test_matrix3_cofactors(void)
 	m.d[7] = 6;
 	m.d[8] = 0;
 
-	failed += test_double("C00", compute_cofactors3(m, 0, 0), -24);
-	failed += test_double("C01", compute_cofactors3(m, 0, 1), 20);
-	failed += test_double("C02", compute_cofactors3(m, 0, 2), -5);
+	failed += test_float("C00", compute_cofactors3(m, 0, 0), -24);
+	failed += test_float("C01", compute_cofactors3(m, 0, 1), 20);
+	failed += test_float("C02", compute_cofactors3(m, 0, 2), -5);
 
-	failed += test_double("C10", compute_cofactors3(m, 1, 0), 18);
-	failed += test_double("C11", compute_cofactors3(m, 1, 1), -15);
-	failed += test_double("C12", compute_cofactors3(m, 1, 2), 4);
+	failed += test_float("C10", compute_cofactors3(m, 1, 0), 18);
+	failed += test_float("C11", compute_cofactors3(m, 1, 1), -15);
+	failed += test_float("C12", compute_cofactors3(m, 1, 2), 4);
 
-	failed += test_double("C20", compute_cofactors3(m, 2, 0), 5);
-	failed += test_double("C21", compute_cofactors3(m, 2, 1), -4);
-	failed += test_double("C22", compute_cofactors3(m, 2, 2), 1);
+	failed += test_float("C20", compute_cofactors3(m, 2, 0), 5);
+	failed += test_float("C21", compute_cofactors3(m, 2, 1), -4);
+	failed += test_float("C22", compute_cofactors3(m, 2, 2), 1);
 
 	return (failed);
 }
@@ -305,7 +305,7 @@ static int	test_matrix3_determinants(void)
 	m.d[6] = 5;
 	m.d[7] = 6;
 	m.d[8] = 0;
-	failed += test_double("3x3 = 1",
+	failed += test_float("3x3 = 1",
 		compute_determinant3(m), 1.0);
 
 	/* determinant = -9 */
@@ -318,7 +318,7 @@ static int	test_matrix3_determinants(void)
 	m.d[6] = 1;
 	m.d[7] = 2;
 	m.d[8] = -2;
-	failed += test_double("3x3 = -9",
+	failed += test_float("3x3 = -9",
 		compute_determinant3(m), -9.0);
 
 	/* determinant = 0 */
@@ -331,7 +331,7 @@ static int	test_matrix3_determinants(void)
 	m.d[6] = 3;
 	m.d[7] = 6;
 	m.d[8] = 9;
-	failed += test_double("3x3 = 0",
+	failed += test_float("3x3 = 0",
 		compute_determinant3(m), 0.0);
 
 	/* determinant = -75 */
@@ -344,7 +344,7 @@ static int	test_matrix3_determinants(void)
 	m.d[6] = 2;
 	m.d[7] = 0;
 	m.d[8] = 7;
-	failed += test_double("3x3 = -75",
+	failed += test_float("3x3 = -75",
 		compute_determinant3(m), -75.0);
 
 	return (failed);
@@ -390,9 +390,9 @@ static int	test_submatrix4(void)
 	m.d[14] = 15;
 	m.d[15] = 16;
 
-	submatrix4(&got, m, 0, 0);
+	got = submatrix4(m, 0, 0);
 	{
-		double expected[] = {
+		float expected[] = {
 			6, 7, 8,
 			10, 11, 12,
 			14, 15, 16
@@ -401,9 +401,9 @@ static int	test_submatrix4(void)
 			got.d, expected, 9);
 	}
 
-	submatrix4(&got, m, 0, 3);
+	got = submatrix4(m, 0, 3);
 	{
-		double expected[] = {
+		float expected[] = {
 			5, 6, 7,
 			9, 10, 11,
 			13, 14, 15
@@ -412,9 +412,9 @@ static int	test_submatrix4(void)
 			got.d, expected, 9);
 	}
 
-	submatrix4(&got, m, 1, 1);
+	got = submatrix4(m, 1, 1);
 	{
-		double expected[] = {
+		float expected[] = {
 			1, 3, 4,
 			9, 11, 12,
 			13, 15, 16
@@ -422,9 +422,9 @@ static int	test_submatrix4(void)
 		failed += test_matrix("submatrix4 (1,1)",
 			got.d, expected, 9);
 	}
-	submatrix4(&got, m, 2, 2);
+	got = submatrix4(m, 2, 2);
 	{
-		double expected[] = {
+		float expected[] = {
 			1, 2, 4,
 			5, 6, 8,
 			13, 14, 16
@@ -432,9 +432,9 @@ static int	test_submatrix4(void)
 		failed += test_matrix("submatrix4 (2,2)",
 			got.d, expected, 9);
 	}
-	submatrix4(&got, m, 3, 0);
+	got = submatrix4(m, 3, 0);
 	{
-		double expected[] = {
+		float expected[] = {
 			2, 3, 4,
 			6, 7, 8,
 			10, 11, 12
@@ -485,25 +485,25 @@ static int	test_matrix4_minors(void)
 	m.d[14] = 1;
 	m.d[15] = 2;
 
-	failed += test_double("M00", compute_minor4(m, 0, 0), -12);
-	failed += test_double("M01", compute_minor4(m, 0, 1), 60);
-	failed += test_double("M02", compute_minor4(m, 0, 2), 12);
-	failed += test_double("M03", compute_minor4(m, 0, 3), -42);
+	failed += test_float("M00", compute_minor4(m, 0, 0), -12);
+	failed += test_float("M01", compute_minor4(m, 0, 1), 60);
+	failed += test_float("M02", compute_minor4(m, 0, 2), 12);
+	failed += test_float("M03", compute_minor4(m, 0, 3), -42);
 
-	failed += test_double("M10", compute_minor4(m, 1, 0), -4);
-	failed += test_double("M11", compute_minor4(m, 1, 1), 20);
-	failed += test_double("M12", compute_minor4(m, 1, 2), -20);
-	failed += test_double("M13", compute_minor4(m, 1, 3), -26);
+	failed += test_float("M10", compute_minor4(m, 1, 0), -4);
+	failed += test_float("M11", compute_minor4(m, 1, 1), 20);
+	failed += test_float("M12", compute_minor4(m, 1, 2), -20);
+	failed += test_float("M13", compute_minor4(m, 1, 3), -26);
 
-	failed += test_double("M20", compute_minor4(m, 2, 0), -4);
-	failed += test_double("M21", compute_minor4(m, 2, 1), -16);
-	failed += test_double("M22", compute_minor4(m, 2, 2), -20);
-	failed += test_double("M23", compute_minor4(m, 2, 3), -8);
+	failed += test_float("M20", compute_minor4(m, 2, 0), -4);
+	failed += test_float("M21", compute_minor4(m, 2, 1), -16);
+	failed += test_float("M22", compute_minor4(m, 2, 2), -20);
+	failed += test_float("M23", compute_minor4(m, 2, 3), -8);
 
-	failed += test_double("M30", compute_minor4(m, 3, 0), -24);
-	failed += test_double("M31", compute_minor4(m, 3, 1), -24);
-	failed += test_double("M32", compute_minor4(m, 3, 2), 24);
-	failed += test_double("M33", compute_minor4(m, 3, 3), 24);
+	failed += test_float("M30", compute_minor4(m, 3, 0), -24);
+	failed += test_float("M31", compute_minor4(m, 3, 1), -24);
+	failed += test_float("M32", compute_minor4(m, 3, 2), 24);
+	failed += test_float("M33", compute_minor4(m, 3, 3), 24);
 
 	return (failed);
 }
@@ -533,25 +533,25 @@ static int	test_matrix4_cofactors(void)
 	m.d[14] = 1;
 	m.d[15] = 2;
 
-	failed += test_double("C00", compute_cofactors4(m, 0, 0), -12);
-	failed += test_double("C01", compute_cofactors4(m, 0, 1), -60);
-	failed += test_double("C02", compute_cofactors4(m, 0, 2), 12);
-	failed += test_double("C03", compute_cofactors4(m, 0, 3), 42);
+	failed += test_float("C00", compute_cofactors4(m, 0, 0), -12);
+	failed += test_float("C01", compute_cofactors4(m, 0, 1), -60);
+	failed += test_float("C02", compute_cofactors4(m, 0, 2), 12);
+	failed += test_float("C03", compute_cofactors4(m, 0, 3), 42);
 
-	failed += test_double("C10", compute_cofactors4(m, 1, 0), 4);
-	failed += test_double("C11", compute_cofactors4(m, 1, 1), 20);
-	failed += test_double("C12", compute_cofactors4(m, 1, 2), 20);
-	failed += test_double("C13", compute_cofactors4(m, 1, 3), -26);
+	failed += test_float("C10", compute_cofactors4(m, 1, 0), 4);
+	failed += test_float("C11", compute_cofactors4(m, 1, 1), 20);
+	failed += test_float("C12", compute_cofactors4(m, 1, 2), 20);
+	failed += test_float("C13", compute_cofactors4(m, 1, 3), -26);
 
-	failed += test_double("C20", compute_cofactors4(m, 2, 0), -4);
-	failed += test_double("C21", compute_cofactors4(m, 2, 1), 16);
-	failed += test_double("C22", compute_cofactors4(m, 2, 2), -20);
-	failed += test_double("C23", compute_cofactors4(m, 2, 3), 8);
+	failed += test_float("C20", compute_cofactors4(m, 2, 0), -4);
+	failed += test_float("C21", compute_cofactors4(m, 2, 1), 16);
+	failed += test_float("C22", compute_cofactors4(m, 2, 2), -20);
+	failed += test_float("C23", compute_cofactors4(m, 2, 3), 8);
 
-	failed += test_double("C30", compute_cofactors4(m, 3, 0), 24);
-	failed += test_double("C31", compute_cofactors4(m, 3, 1), -24);
-	failed += test_double("C32", compute_cofactors4(m, 3, 2), -24);
-	failed += test_double("C33", compute_cofactors4(m, 3, 3), 24);
+	failed += test_float("C30", compute_cofactors4(m, 3, 0), 24);
+	failed += test_float("C31", compute_cofactors4(m, 3, 1), -24);
+	failed += test_float("C32", compute_cofactors4(m, 3, 2), -24);
+	failed += test_float("C33", compute_cofactors4(m, 3, 3), 24);
 
 	return (failed);
 }
@@ -582,7 +582,7 @@ static int	test_matrix4_determinants(void)
 	m.d[14] = 1;
 	m.d[15] = 2;
 
-	failed += test_double("4x4 = 72",
+	failed += test_float("4x4 = 72",
 		compute_determinant4(m), 72.0);
 
 	/* determinant = -63 */
@@ -603,7 +603,7 @@ static int	test_matrix4_determinants(void)
 	m.d[14] = -1;
 	m.d[15] = 1;
 
-	failed += test_double("4x4 = -63",
+	failed += test_float("4x4 = -63",
 		compute_determinant4(m), -63.0);
 
 	/* determinant = -105 */
@@ -624,7 +624,7 @@ static int	test_matrix4_determinants(void)
 	m.d[14] = 2;
 	m.d[15] = 0;
 
-	failed += test_double("4x4 = -105",
+	failed += test_float("4x4 = -105",
 		compute_determinant4(m), -105.0);
 
 	/* determinant = 0 */
@@ -645,7 +645,7 @@ static int	test_matrix4_determinants(void)
 	m.d[14] = 1;
 	m.d[15] = 9;
 
-	failed += test_double("4x4 = 0",
+	failed += test_float("4x4 = 0",
 		compute_determinant4(m), 0.0);
 
 	return (failed);
@@ -682,8 +682,8 @@ static int	test_inverse4()
 	m.d[14] = 7.0;
 	m.d[15] = 4.0;
 
-	invert_matrix4(&got, m);
-	double expected[] = {
+	got = invert_matrix4(m);
+	float expected[] = {
 		0.218045112782, 0.451127819549, 0.240601503759, -0.045112781955,
 		-0.808270676692, -1.456766917293, -0.443609022556, 0.520676691729,
 		-0.078947368421, -0.223684210526, -0.052631578947, 0.197368421053,
@@ -725,8 +725,8 @@ static int	test_transpose4(void)
 	m.d[14] = 15;
 	m.d[15] = 16;
 
-	transpose_matrices4(&got, m);
-		double expected[] = {
+	got = transpose_matrices4(m);
+		float expected[] = {
 			1, 5, 9, 13,
 			2, 6, 10, 14,
 			3, 7, 11, 15,
@@ -789,10 +789,10 @@ static int	test_matrix4_multiplication(void)
 	b.d[14] = 2;
 	b.d[15] = 1;
 
-	mul_matrices4(&got, a, b);
+	got = mul_matrices4(a, b);
 
 	{
-		double expected[] = {
+		float expected[] = {
 			80, 70, 60, 50,
 			240, 214, 188, 162,
 			400, 358, 316, 274,
@@ -856,11 +856,11 @@ static int	test_identity_multiplication(void)
 	id.d[14] = 0;
 	id.d[15] = 1;
 
-	mul_matrices4(&got, m, id);
+	got = mul_matrices4(m, id);
 
 	failed += test_matrix("M * I", got.d, m.d, 16);
 
-	mul_matrices4(&got, id, m);
+	got = mul_matrices4(id, m);
 
 	failed += test_matrix("I * M", got.d, m.d, 16);
 
@@ -916,14 +916,14 @@ int	test_vector_addition(void)
 	failed = 0;
 	printf("\n  -- vector addition --\n");
 
-	set_vec4(&v1, 1.0, 2.0, 3.0);
-	set_vec4(&v2, 4.0, 5.0, 6.0);
-	add_vectors(&got, v1, v2);
+	v1 = set_vec4(1.0, 2.0, 3.0);
+	v2 = set_vec4(4.0, 5.0, 6.0);
+	got = add_vectors(v1, v2);
 
-	failed += test_double("x", got.x, 5.0);
-	failed += test_double("y", got.y, 7.0);
-	failed += test_double("z", got.z, 9.0);
-	failed += test_double("w", got.w, 0.0);
+	failed += test_float("x", got.x, 5.0);
+	failed += test_float("y", got.y, 7.0);
+	failed += test_float("z", got.z, 9.0);
+	failed += test_float("w", got.w, 0.0);
 
 	return (failed);
 }
@@ -938,14 +938,14 @@ int	test_vector_substraction(void)
 	failed = 0;
 	printf("\n  -- vector subtraction --\n");
 
-	set_vec4(&v1, 5.0, 7.0, 9.0);
-	set_vec4(&v2, 1.0, 2.0, 3.0);
-	sub_vectors(&got, v1, v2);
+	v1 = set_vec4(5.0, 7.0, 9.0);
+	v2 = set_vec4(1.0, 2.0, 3.0);
+	got = sub_vectors(v1, v2);
 
-	failed += test_double("x", got.x, 4.0);
-	failed += test_double("y", got.y, 5.0);
-	failed += test_double("z", got.z, 6.0);
-	failed += test_double("w", got.w, 0.0);
+	failed += test_float("x", got.x, 4.0);
+	failed += test_float("y", got.y, 5.0);
+	failed += test_float("z", got.z, 6.0);
+	failed += test_float("w", got.w, 0.0);
 
 	return (failed);
 }
@@ -958,13 +958,13 @@ int	test_vector_negation(void)
 	failed = 0;
 	printf("\n  -- vector negation --\n");
 
-	set_vec4(&v, 1.0, -2.0, 3.0);
-	negate_vector(&v);
+	v = set_vec4(1.0, -2.0, 3.0);
+	v = negate_vector(v);
 
-	failed += test_double("x", v.x, -1.0);
-	failed += test_double("y", v.y, 2.0);
-	failed += test_double("z", v.z, -3.0);
-	failed += test_double("w", v.w, 0.0);
+	failed += test_float("x", v.x, -1.0);
+	failed += test_float("y", v.y, 2.0);
+	failed += test_float("z", v.z, -3.0);
+	failed += test_float("w", v.w, 0.0);
 
 	return (failed);
 }
@@ -977,13 +977,13 @@ int	test_vector_multiplication(void)
 	failed = 0;
 	printf("\n  -- vector multiplication --\n");
 
-	set_vec4(&v, 1.0, -2.0, 3.0);
-	mul_vector(&v, 2.5);
+	v = set_vec4(1.0, -2.0, 3.0);
+	v = mul_vector(v, 2.5);
 
-	failed += test_double("x", v.x, 2.5);
-	failed += test_double("y", v.y, -5.0);
-	failed += test_double("z", v.z, 7.5);
-	failed += test_double("w", v.w, 0.0);
+	failed += test_float("x", v.x, 2.5);
+	failed += test_float("y", v.y, -5.0);
+	failed += test_float("z", v.z, 7.5);
+	failed += test_float("w", v.w, 0.0);
 
 	return (failed);
 }
@@ -996,13 +996,13 @@ int	test_vector_division(void)
 	failed = 0;
 	printf("\n  -- vector division --\n");
 
-	set_vec4(&v, 2.0, -4.0, 8.0);
-	mul_vector(&v, 0.5);
+	v = set_vec4(2.0, -4.0, 8.0);
+	v = mul_vector(v, 0.5);
 
-	failed += test_double("x", v.x, 1.0);
-	failed += test_double("y", v.y, -2.0);
-	failed += test_double("z", v.z, 4.0);
-	failed += test_double("w", v.w, 0.0);
+	failed += test_float("x", v.x, 1.0);
+	failed += test_float("y", v.y, -2.0);
+	failed += test_float("z", v.z, 4.0);
+	failed += test_float("w", v.w, 0.0);
 
 	return (failed);
 }
@@ -1010,16 +1010,16 @@ int	test_vector_division(void)
 int	test_vector_magnitude(void)
 {
 	t_vec4	v;
-	double	magnitude;
+	float	magnitude;
 	int		failed;
 
 	failed = 0;
 	printf("\n  -- vector magnitude --\n");
 
-	set_vec4(&v, 3.0, 4.0, 0.0);
+	v = set_vec4(3.0, 4.0, 0.0);
 	magnitude = compute_magnitude(v);
 
-	failed += test_double("magnitude", magnitude, 5.0);
+	failed += test_float("magnitude", magnitude, 5.0);
 
 	return (failed);
 }
@@ -1032,13 +1032,13 @@ int	test_vector_normalization(void)
 	failed = 0;
 	printf("\n  -- vector normalization --\n");
 
-	set_vec4(&v, 3.0, 4.0, 0.0);
-	normalize_vector(&v, compute_magnitude(v));
+	v = set_vec4(3.0, 4.0, 0.0);
+	v = normalize_vector(v, compute_magnitude(v));
 
-	failed += test_double("x", v.x, 0.6);
-	failed += test_double("y", v.y, 0.8);
-	failed += test_double("z", v.z, 0.0);
-	failed += test_double("magnitude", compute_magnitude(v), 1.0);
+	failed += test_float("x", v.x, 0.6);
+	failed += test_float("y", v.y, 0.8);
+	failed += test_float("z", v.z, 0.0);
+	failed += test_float("magnitude", compute_magnitude(v), 1.0);
 
 	return (failed);
 }
@@ -1053,15 +1053,15 @@ int	test_vector_cross_product(void)
 	failed = 0;
 	printf("\n  -- vector cross product --\n");
 
-	set_vec4(&v1, 1.0, 2.0, 3.0);
-	set_vec4(&v2, 2.0, 3.0, 4.0);
+	v1 = set_vec4(1.0, 2.0, 3.0);
+	v2 = set_vec4(2.0, 3.0, 4.0);
 
-	compute_cross(&got, v1, v2);
+	got = compute_cross(v1, v2);
 
-	failed += test_double("x", got.x, -1.0);
-	failed += test_double("y", got.y, 2.0);
-	failed += test_double("z", got.z, -1.0);
-	failed += test_double("w", got.w, 0.0);
+	failed += test_float("x", got.x, -1.0);
+	failed += test_float("y", got.y, 2.0);
+	failed += test_float("z", got.z, -1.0);
+	failed += test_float("w", got.w, 0.0);
 
 	return (failed);
 }
@@ -1070,18 +1070,18 @@ int	test_vector_dot_product(void)
 {
 	t_vec4	v1;
 	t_vec4	v2;
-	double	got;
+	float	got;
 	int		failed;
 
 	failed = 0;
 	printf("\n  -- vector dot product --\n");
 
-	set_vec4(&v1, 1.0, 2.0, 3.0);
-	set_vec4(&v2, 2.0, 3.0, 4.0);
+	v1 = set_vec4(1.0, 2.0, 3.0);
+	v2 = set_vec4(2.0, 3.0, 4.0);
 
 	got = compute_dot(v1, v2);
 
-	failed += test_double("dot", got, 20.0);
+	failed += test_float("dot", got, 20.0);
 
 	return (failed);
 }
@@ -1120,14 +1120,14 @@ int	test_point_substraction(void)
 
 	failed = 0;
 	printf("\n  -- point substraction --\n");
-	set_point(&p1, 2.0, 4.0, -3.0);
-	set_point(&p2, 6.0, 4.0, -2.0);
-	sub_points(&got, p1, p2);
+	p1 = set_point(2.0, 4.0, -3.0);
+	p2 = set_point(6.0, 4.0, -2.0);
+	got = sub_points(p1, p2);
 
-	failed += test_double("x", got.x, -4.0);
-	failed += test_double("y", got.y, 0.0);
-	failed += test_double("z", got.z, -1.0);
-	failed += test_double("w", got.w, 0.0);
+	failed += test_float("x", got.x, -4.0);
+	failed += test_float("y", got.y, 0.0);
+	failed += test_float("z", got.z, -1.0);
+	failed += test_float("w", got.w, 0.0);
 
 	return (failed);
 }
@@ -1141,14 +1141,14 @@ int	test_vector_substraction_from_point(void)
 
 	failed = 0;
 	printf("\n  -- point vector substraction from point --\n");
-	set_point(&p, 2.0, 4.0, -3.0);
-	set_vec4(&v, 6.0, 4.0, -2.0);
-	sub_vector_from_point(&got, v, p);
+	p = set_point(2.0, 4.0, -3.0);
+	v = set_vec4(6.0, 4.0, -2.0);
+	got = sub_vector_from_point(v, p);
 
-	failed += test_double("x", got.x, -4.0);
-	failed += test_double("y", got.y, 0.0);
-	failed += test_double("z", got.z, -1.0);
-	failed += test_double("w", got.w, 1.0);
+	failed += test_float("x", got.x, -4.0);
+	failed += test_float("y", got.y, 0.0);
+	failed += test_float("z", got.z, -1.0);
+	failed += test_float("w", got.w, 1.0);
 
 	return (failed);
 }
@@ -1188,20 +1188,20 @@ int	test_transformation_translation(void)
 	};
 	failed = 0;
 	printf("\n  -- translation transformation tests --\n");
-	translation_matrix4(&m, (struct s_data){.x = 2.0, .y = 3.0, .z = 4.0});
+	m = translation_matrix4((struct s_data){.x = 2.0, .y = 3.0, .z = 4.0});
 	test_matrix("translation matrix 4x4", m.d, translated_matrix4.d, 16);
-	set_point(&p, -3, 4, 5);
-	mul_translation_matrix(&got, p, (struct s_data){.x = 5, .y = -3, .z = 2});
+	p = set_point(-3, 4, 5);
+	got = mul_translation_matrix(p, (struct s_data){.x = 5, .y = -3, .z = 2});
 	printf("\n  -- translation transformation tests --\n");
 	printf("multiplying by a translation matrix: \n");
-	failed += test_double("x", got.x, 2.0);
-	failed += test_double("y", got.y, 1.0);
-	failed += test_double("z", got.z, 7.0);
+	failed += test_float("x", got.x, 2.0);
+	failed += test_float("y", got.y, 1.0);
+	failed += test_float("z", got.z, 7.0);
 	printf("multiplying by the inverse of a translation matrix: \n");
-	mul_inv_translation_matrix(&got, p, (struct s_data){.x = 5, .y = -3, .z = 2});
-	failed += test_double("x", got.x, -8.0);
-	failed += test_double("y", got.y, 7.0);
-	failed += test_double("z", got.z, 3.0);
+	got = mul_inv_translation_matrix(p, (struct s_data){.x = 5, .y = -3, .z = 2});
+	failed += test_float("x", got.x, -8.0);
+	failed += test_float("y", got.y, 7.0);
+	failed += test_float("z", got.z, 3.0);
 	return (failed);
 }
 
@@ -1218,7 +1218,7 @@ int	test_transformation_scaling(void)
 
 	failed = 0;
 	printf("\n  -- scaling transformation tests --\n");
-	scaling_matrix4(&m, (struct s_data){.x = 2, .y = 3, .z = 4});
+	m = scaling_matrix4((struct s_data){.x = 2, .y = 3, .z = 4});
 	scaled_matrix4 = (t_m4){
 		.d = {
 			2.0, 0.0, 0.0, 0.0,
@@ -1230,25 +1230,25 @@ int	test_transformation_scaling(void)
 	failed = test_matrix("scale matrix 4x4", m.d, scaled_matrix4.d, 16);
 
 	printf("A scaling matrix applied to a point\n");
-	set_point(&p, -4, 6, 8);
-	mul_matrix4_by_point(&got_point, p, m);
-	failed += test_double("x", got_point.x, -8.0);
-	failed += test_double("y", got_point.y, 18.0);
-	failed += test_double("z", got_point.z, 32.0);
+	p = set_point(-4, 6, 8);
+	got_point =  mul_matrix4_by_point(p, m);
+	failed += test_float("x", got_point.x, -8.0);
+	failed += test_float("y", got_point.y, 18.0);
+	failed += test_float("z", got_point.z, 32.0);
 
 	printf("A scaling matrix applied to a vector\n");
-	set_vec4(&v, -4, 6, 8);
-	mul_matrix4_by_vector(&got_vector, v, m);
-	failed += test_double("x", got_vector.x, -8.0);
-	failed += test_double("y", got_vector.y, 18.0);
-	failed += test_double("z", got_vector.z, 32.0);
+	v = set_vec4(-4, 6, 8);
+	got_vector = mul_matrix4_by_vector(v, m);
+	failed += test_float("x", got_vector.x, -8.0);
+	failed += test_float("y", got_vector.y, 18.0);
+	failed += test_float("z", got_vector.z, 32.0);
 
 	printf("Multiplying by the inverse of a scaling matrix\n");
-	invert_matrix4(&inv, m);
-	mul_matrix4_by_vector(&got_vector, v, inv);
-	failed += test_double("x", got_vector.x, -2.0);
-	failed += test_double("y", got_vector.y, 2.0);
-	failed += test_double("z", got_vector.z, 2.0);
+	inv = invert_matrix4(m);
+	got_vector =  mul_matrix4_by_vector(v, inv);
+	failed += test_float("x", got_vector.x, -2.0);
+	failed += test_float("y", got_vector.y, 2.0);
+	failed += test_float("z", got_vector.z, 2.0);
 	return (failed);
 }
 
@@ -1266,28 +1266,28 @@ int	test_transformation_rotate_x(void)
 
 	failed = 0;
 	printf("\n  -- rotation x transformation tests --\n");
-	set_point(&p, 0.0, 1.0, 0.0);
-	rotation_x(&half_quarter, M_PI / 4);
-	rotation_x(&full_quarter, M_PI / 2);
-	mul_matrix4_by_point(&got_half_quarter, p, half_quarter);
-	mul_matrix4_by_point(&got_full_quarter, p, full_quarter);
-	invert_matrix4(&inv, half_quarter);
-	mul_matrix4_by_point(&got_half_quarter_inv, p, inv);
+	p = set_point(0.0, 1.0, 0.0);
+	half_quarter = rotation_x(M_PI / 4);
+	full_quarter=rotation_x(M_PI / 2);
+	got_half_quarter = mul_matrix4_by_point(p, half_quarter);
+	got_full_quarter = mul_matrix4_by_point(p, full_quarter);
+	inv = invert_matrix4(half_quarter);
+	got_half_quarter_inv = mul_matrix4_by_point(p, inv);
 
 	printf("\nrotating a point around the x axis with a half quarter\n");
-	failed += test_double("x", got_half_quarter.x, 0.0);
-	failed += test_double("y", got_half_quarter.y, sqrt(2) / 2);
-	failed += test_double("z", got_half_quarter.z, sqrt(2) / 2);
+	failed += test_float("x", got_half_quarter.x, 0.0);
+	failed += test_float("y", got_half_quarter.y, sqrt(2) / 2);
+	failed += test_float("z", got_half_quarter.z, sqrt(2) / 2);
 
 	printf("\nrotating a point around the x axis with a full quarter\n");
-	failed += test_double("x", got_full_quarter.x, 0.0);
-	failed += test_double("y", got_full_quarter.y, 0.0);
-	failed += test_double("z", got_full_quarter.z, 1.0);
+	failed += test_float("x", got_full_quarter.x, 0.0);
+	failed += test_float("y", got_full_quarter.y, 0.0);
+	failed += test_float("z", got_full_quarter.z, 1.0);
 
 	printf("\nThe inverse of an x-rotation rotates in the opposite direction with half quarter\n");
-	failed += test_double("x", got_half_quarter_inv.x, 0.0);
-	failed += test_double("y", got_half_quarter_inv.y, sqrt(2)/2);
-	failed += test_double("z", got_half_quarter_inv.z, -(sqrt(2)/2));
+	failed += test_float("x", got_half_quarter_inv.x, 0.0);
+	failed += test_float("y", got_half_quarter_inv.y, sqrt(2)/2);
+	failed += test_float("z", got_half_quarter_inv.z, -(sqrt(2)/2));
 
 	return (failed);
 }
@@ -1297,32 +1297,28 @@ int	test_transformation_rotate_y(void)
 	t_point	p;
 	t_point	got_half_quarter;
 	t_point	got_full_quarter;
-	t_point	got_half_quarter_inv;
 	t_m4	half_quarter;
 	t_m4	full_quarter;
-	t_m4	inv;
 
 	int	failed;
 
 	failed = 0;
 	printf("\n  -- rotation y transformation tests --\n");
-	set_point(&p, 0.0, 0.0, 1.0);
-	rotation_y(&half_quarter, M_PI / 4);
-	rotation_y(&full_quarter, M_PI / 2);
-	mul_matrix4_by_point(&got_half_quarter, p, half_quarter);
-	mul_matrix4_by_point(&got_full_quarter, p, full_quarter);
-	invert_matrix4(&inv, half_quarter);
-	mul_matrix4_by_point(&got_half_quarter_inv, p, inv);
+	p = set_point(0.0, 0.0, 1.0);
+	half_quarter = rotation_y(M_PI / 4);
+	full_quarter = rotation_y(M_PI / 2);
+	got_half_quarter = mul_matrix4_by_point(p, half_quarter);
+	got_full_quarter = mul_matrix4_by_point(p, full_quarter);
 
 	printf("\nrotating a point around the y axis with a half quarter\n");
-	failed += test_double("x", got_half_quarter.x, sqrt(2) / 2);
-	failed += test_double("y", got_half_quarter.y, 0.0);
-	failed += test_double("z", got_half_quarter.z, sqrt(2) / 2);
+	failed += test_float("x", got_half_quarter.x, fsqrt(2) / 2);
+	failed += test_float("y", got_half_quarter.y, 0.0);
+	failed += test_float("z", got_half_quarter.z, fsqrt(2) / 2);
 
 	printf("\nrotating a point around the y axis with a full quarter\n");
-	failed += test_double("x", got_full_quarter.x, 1.0);
-	failed += test_double("y", got_full_quarter.y, 0.0);
-	failed += test_double("z", got_full_quarter.z, 0.0);
+	failed += test_float("x", got_full_quarter.x, 1.0);
+	failed += test_float("y", got_full_quarter.y, 0.0);
+	failed += test_float("z", got_full_quarter.z, 0.0);
 
 	return (failed);
 }
@@ -1332,32 +1328,28 @@ int	test_transformation_rotate_z(void)
 	t_point	p;
 	t_point	got_half_quarter;
 	t_point	got_full_quarter;
-	t_point	got_half_quarter_inv;
 	t_m4	half_quarter;
 	t_m4	full_quarter;
-	t_m4	inv;
 
 	int	failed;
 
 	failed = 0;
 	printf("\n  -- rotation z transformation tests --\n");
-	set_point(&p, 0.0, 1.0, 0.0);
-	rotation_z(&half_quarter, M_PI / 4);
-	rotation_z(&full_quarter, M_PI / 2);
-	mul_matrix4_by_point(&got_half_quarter, p, half_quarter);
-	mul_matrix4_by_point(&got_full_quarter, p, full_quarter);
-	invert_matrix4(&inv, half_quarter);
-	mul_matrix4_by_point(&got_half_quarter_inv, p, inv);
+	p = set_point(0.0, 1.0, 0.0);
+	half_quarter = rotation_z(M_PI / 4);
+	full_quarter = rotation_z(M_PI / 2);
+	got_half_quarter = mul_matrix4_by_point(p, half_quarter);
+	got_full_quarter = mul_matrix4_by_point(p, full_quarter);
 
 	printf("\nrotating a point around the z axis with a half quarter\n");
-	failed += test_double("x", got_half_quarter.x, -(sqrt(2) / 2));
-	failed += test_double("y", got_half_quarter.y, sqrt(2) / 2);
-	failed += test_double("z", got_half_quarter.z, 0.0);
+	failed += test_float("x", got_half_quarter.x, -(sqrt(2) / 2));
+	failed += test_float("y", got_half_quarter.y, sqrt(2) / 2);
+	failed += test_float("z", got_half_quarter.z, 0.0);
 
 	printf("\nrotating a point around the z axis with a full quarter\n");
-	failed += test_double("x", got_full_quarter.x, -1.0);
-	failed += test_double("y", got_full_quarter.y, 0.0);
-	failed += test_double("z", got_full_quarter.z, 0.0);
+	failed += test_float("x", got_full_quarter.x, -1.0);
+	failed += test_float("y", got_full_quarter.y, 0.0);
+	failed += test_float("z", got_full_quarter.z, 0.0);
 
 	return (failed);
 }
@@ -1371,7 +1363,7 @@ int	test_transformation_shearing(void)
 
 	failed = 0;
 	printf("\n  -- shearing transformation tests --\n");
-	shearing_matrix4(&m, (struct s_data_shearing){.xy = 10.0, .xz = 11.0, .yx = 12.0, .yz = 13.0, .zx = 14.0, .zy = 15.0});
+	m = shearing_matrix4((struct s_data_shearing){.xy = 10.0, .xz = 11.0, .yx = 12.0, .yz = 13.0, .zx = 14.0, .zy = 15.0});
 	t_m4 expected = (t_m4){
 		.d = {
 			1.0, 10.0, 11.0, 0.0,
@@ -1382,49 +1374,49 @@ int	test_transformation_shearing(void)
 	};
 	failed += test_matrix("shearing matrix 4x4", m.d, expected.d, 16);
 
-	set_point(&p, 2.0, 3.0, 4.0);
+	p = set_point(2.0, 3.0, 4.0);
 
 	printf("\nA shearing transformation moves x in proportion to y\n");
-	shearing_matrix4(&m, (struct s_data_shearing){.xy = 1.0, .xz = 0.0, .yx = 0.0, .yz = 0.0, .zx = 0.0, .zy = 0.0});
-	mul_matrix4_by_point(&got, p, m);
-	failed += test_double("x", got.x, 5.0);
-	failed += test_double("y", got.y, 3.0);
-	failed += test_double("z", got.z, 4.0);
+	m = shearing_matrix4((struct s_data_shearing){.xy = 1.0, .xz = 0.0, .yx = 0.0, .yz = 0.0, .zx = 0.0, .zy = 0.0});
+	got = mul_matrix4_by_point(p, m);
+	failed += test_float("x", got.x, 5.0);
+	failed += test_float("y", got.y, 3.0);
+	failed += test_float("z", got.z, 4.0);
 
 	printf("\nA shearing transformation moves x in proportion to z\n");
-	shearing_matrix4(&m, (struct s_data_shearing){.xy = 0.0, .xz = 1.0, .yx = 0.0, .yz = 0.0, .zx = 0.0, .zy = 0.0});
-	mul_matrix4_by_point(&got, p, m);
-	failed += test_double("x", got.x, 6.0);
-	failed += test_double("y", got.y, 3.0);
-	failed += test_double("z", got.z, 4.0);
+	m = shearing_matrix4((struct s_data_shearing){.xy = 0.0, .xz = 1.0, .yx = 0.0, .yz = 0.0, .zx = 0.0, .zy = 0.0});
+	got = mul_matrix4_by_point(p, m);
+	failed += test_float("x", got.x, 6.0);
+	failed += test_float("y", got.y, 3.0);
+	failed += test_float("z", got.z, 4.0);
 
 	printf("\nA shearing transformation moves y in proportion to x\n");
-	shearing_matrix4(&m, (struct s_data_shearing){.xy = 0.0, .xz = 0.0, .yx = 1.0, .yz = 0.0, .zx = 0.0, .zy = 0.0});
-	mul_matrix4_by_point(&got, p, m);
-	failed += test_double("x", got.x, 2.0);
-	failed += test_double("y", got.y, 5.0);
-	failed += test_double("z", got.z, 4.0);
+	m = shearing_matrix4((struct s_data_shearing){.xy = 0.0, .xz = 0.0, .yx = 1.0, .yz = 0.0, .zx = 0.0, .zy = 0.0});
+	got = mul_matrix4_by_point(p, m);
+	failed += test_float("x", got.x, 2.0);
+	failed += test_float("y", got.y, 5.0);
+	failed += test_float("z", got.z, 4.0);
 
 	printf("\nA shearing transformation moves y in proportion to z\n");
-	shearing_matrix4(&m, (struct s_data_shearing){.xy = 0.0, .xz = 0.0, .yx = 0.0, .yz = 1.0, .zx = 0.0, .zy = 0.0});
-	mul_matrix4_by_point(&got, p, m);
-	failed += test_double("x", got.x, 2.0);
-	failed += test_double("y", got.y, 7.0);
-	failed += test_double("z", got.z, 4.0);
+	m = shearing_matrix4((struct s_data_shearing){.xy = 0.0, .xz = 0.0, .yx = 0.0, .yz = 1.0, .zx = 0.0, .zy = 0.0});
+	got = mul_matrix4_by_point(p, m);
+	failed += test_float("x", got.x, 2.0);
+	failed += test_float("y", got.y, 7.0);
+	failed += test_float("z", got.z, 4.0);
 
 	printf("\nA shearing transformation moves z in proportion to x\n");
-	shearing_matrix4(&m, (struct s_data_shearing){.xy = 0.0, .xz = 0.0, .yx = 0.0, .yz = 0.0, .zx = 1.0, .zy = 0.0});
-	mul_matrix4_by_point(&got, p, m);
-	failed += test_double("x", got.x, 2.0);
-	failed += test_double("y", got.y, 3.0);
-	failed += test_double("z", got.z, 6.0);
+	m = shearing_matrix4((struct s_data_shearing){.xy = 0.0, .xz = 0.0, .yx = 0.0, .yz = 0.0, .zx = 1.0, .zy = 0.0});
+	got = mul_matrix4_by_point(p, m);
+	failed += test_float("x", got.x, 2.0);
+	failed += test_float("y", got.y, 3.0);
+	failed += test_float("z", got.z, 6.0);
 
 	printf("\nA shearing transformation moves z in proportion to y\n");
-	shearing_matrix4(&m, (struct s_data_shearing){.xy = 0.0, .xz = 0.0, .yx = 0.0, .yz = 0.0, .zx = 0.0, .zy = 1.0});
-	mul_matrix4_by_point(&got, p, m);
-	failed += test_double("x", got.x, 2.0);
-	failed += test_double("y", got.y, 3.0);
-	failed += test_double("z", got.z, 7.0);
+	m = shearing_matrix4((struct s_data_shearing){.xy = 0.0, .xz = 0.0, .yx = 0.0, .yz = 0.0, .zx = 0.0, .zy = 1.0});
+	got = mul_matrix4_by_point(p, m);
+	failed += test_float("x", got.x, 2.0);
+	failed += test_float("y", got.y, 3.0);
+	failed += test_float("z", got.z, 7.0);
 
 	return (failed);
 }

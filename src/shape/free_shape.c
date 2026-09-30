@@ -1,3 +1,4 @@
+#include "shapes.h"
 #include "minirt.h"
 #include "vector.h"
 

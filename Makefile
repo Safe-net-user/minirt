@@ -102,6 +102,7 @@ $(SRC)/$(PARSER)/parser_utils.c \
 $(SRC)/$(MATHS)/transformations.c \
 $(SRC)/$(MATHS)/matrix3.c \
 $(SRC)/$(MATHS)/matrix4.c \
+$(SRC)/$(MATHS)/ray.c \
 $(SRC)/$(PHYSIC)/intersection.c \
 $(SRC)/$(SHAPE)/cylinder.c \
 $(SRC)/$(SHAPE)/free_shape.c \

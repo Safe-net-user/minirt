@@ -1,9 +1,18 @@
 #include "minirt.h"
-#include "ft_stack_alloc.h"
 #include "macros.h"
+#include "core.h"
+#include "shapes.h"
 #include "mlx.h"
+#include "window.h"
 
-int	init_minirt(t_mrt *mrt)
+void	free_mrt(t_mrt *mrt)
+{
+	free_cylinder(mrt);
+	free_plane(mrt);
+	free_sphere(mrt);
+}
+
+static int	init_minirt(t_mrt *mrt)
 {
 	mrt->mlx = mlx_init();
 	mrt->mlx_win = mlx_new_window(mrt->mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "miniRT");
@@ -38,7 +47,7 @@ int	main(int ac, char **av)
 		free_mrt(&mrt);
 		return (1);
 	}
-	launch_ray_tracer(mrt);
+	launch_ray_tracer(&mrt);
 	mlx_key_hook(mrt.mlx_win, key_hook, &mrt);
 	mlx_hook(mrt.mlx_win, 17, 1L << 2, free_mlx_mrt, &mrt);
 	mlx_loop(mrt.mlx);

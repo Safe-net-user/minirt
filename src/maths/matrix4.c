@@ -109,7 +109,6 @@ t_m4	invert_matrix4(const t_m4 m)
 	if (!compute_determinant4(m))
 		return (m);
 	det = compute_determinant4(m);
-	printf("det");
 	row = 0;
 	while (row < 4)
 	{

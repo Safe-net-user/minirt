@@ -1,8 +1,15 @@
 #include "window.h"
 #include "minirt.h"
 #include "mlx.h"
+#include "shapes.h"
 #include <stdlib.h>
 
+static void	free_mrt(t_mrt *mrt)
+{
+	free_cylinder(mrt);
+	free_plane(mrt);
+	free_sphere(mrt);
+}
 
 int	free_mlx_mrt(t_mrt *mrt)
 {

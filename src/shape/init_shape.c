@@ -1,4 +1,4 @@
-#include "shape.h"
+#include "shapes.h"
 #include "vector.h"
 
 int	init_sphere(t_sphere *s)

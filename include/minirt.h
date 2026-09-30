@@ -1,9 +1,10 @@
 #ifndef MINIRT_H
 #define MINIRT_H
 
-# include "ft_stack_alloc.h"
-# include "shapes.h"
 #include "types.h"
+#include "../src/shape/sphere.h"
+#include "../src/shape/plane.h"
+#include "../src/shape/cylinder.h"
 
 typedef struct s_mrt
 {
@@ -18,9 +19,7 @@ typedef struct s_mrt
 }	t_mrt;
 
 int		key_hook(int keycode, void *param);
-int		free_mlx_mrt(t_mrt *mrt);
 int		parser(t_mrt *mrt, char *path);
-int		init_minirt(t_mrt *mrt);
 void	free_mrt(t_mrt *mrt);
 
 #endif //MINIRT_H

@@ -1,11 +1,8 @@
 #include "sphere.h"
-#include <math.h>
-#include <stddef.h>
 #include "minirt.h"
 #include "maths.h"
-#include "shapes.h"
 
-void	intersect(t_mrt *mrt, t_sphere *sp, size_t sp_id, t_ray r)
+/*void	intersect(t_mrt *mrt, t_sphere *sp, size_t sp_id, t_ray r)
 {
 	t_point		center_sp;
 	t_vec4		sphere_to_ray;
@@ -30,7 +27,4 @@ void	intersect(t_mrt *mrt, t_sphere *sp, size_t sp_id, t_ray r)
 	else
 		intersect->count->buffer[sp_id] = 2;
 	return (intersect);
-
-
-
-}
+}*/

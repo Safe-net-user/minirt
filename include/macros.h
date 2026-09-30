@@ -21,6 +21,4 @@
 # define WINDOW_HEIGHT 1080
 #endif
 
-# define ESC_KEY 65307
-
 #endif //MACROS_H

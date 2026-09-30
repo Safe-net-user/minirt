@@ -19,8 +19,8 @@ SRC				:= math_tester.c
 TEST_OBJ		:= $(OBJ)/test/math_tester.o
 
 OBJ_FILES		:= \
-$(OBJ)/maths/matrix/matrix4.o \
-$(OBJ)/maths/matrix/matrix3.o \
+$(OBJ)/maths/matrix4.o \
+$(OBJ)/maths/matrix3.o \
 $(OBJ)/maths/transformations.o
 
 # --------------------- FLAGS ------------------- #

@@ -1,4 +1,4 @@
-#include "ray.h"
+#include "../maths/ray.h"
 
 t_point	position(const t_ray r, const double t)
 {

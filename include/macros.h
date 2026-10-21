@@ -14,11 +14,11 @@
 #endif
 
 #ifndef WINDOW_WIDTH
-# define WINDOW_WIDTH 1920
+# define WINDOW_WIDTH 300
 #endif
 
 #ifndef WINDOW_HEIGHT
-# define WINDOW_HEIGHT 1080
+# define WINDOW_HEIGHT 300
 #endif
 
 #endif //MACROS_H

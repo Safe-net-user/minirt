@@ -11,7 +11,7 @@ typedef struct s_vec4
 	float	w;
 }	t_vec4;
 
-static  inline __attribute__((__always_inline__)) t_vec4 set_vec4(const float x, const float y, const float z)
+static inline __attribute__((__always_inline__)) t_vec4 set_vec4(const float x, const float y, const float z)
 {
 	return ((t_vec4){x, y, z, 0.0});
 }
@@ -38,7 +38,7 @@ static inline __attribute__((always_inline)) t_vec4	mul_vector(const t_vec4 v, c
 
 static inline __attribute__((always_inline)) float	compute_magnitude(const t_vec4 v)
 {
-	return (sqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w));
+	return (sqrtf(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w));
 }
 
 static inline __attribute__((always_inline)) t_vec4	normalize_vector(const t_vec4 v, const float magnitude)

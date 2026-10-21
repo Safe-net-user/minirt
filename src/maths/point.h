@@ -13,7 +13,7 @@ typedef struct s_point
 
 static  inline __attribute__((always_inline)) t_point	set_point(const float x, const float y, const float z)
 {
-	return ((t_point){x, y, z, 1.0});
+	return ((t_point){x, y, z, 1.0f});
 }
 
 static inline __attribute__((always_inline)) t_point	add_vector_to_point(const t_point p, const t_vec4 v)

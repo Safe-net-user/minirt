@@ -14,7 +14,10 @@ typedef struct s_ray
 
 static inline __attribute__((always_inline)) t_ray	set_ray(const t_point p, const t_vec4 v)
 {
-	return ((t_ray){p, v});
+	return ((t_ray){
+		.origin = p,
+		.direction = v,
+	});
 }
 
 t_point	position(t_ray r, double t);

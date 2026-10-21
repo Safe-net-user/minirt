@@ -1,30 +1,44 @@
+#include <stddef.h>
+#include "../physic/ray.h"
 #include "sphere.h"
 #include "minirt.h"
 #include "maths.h"
+#include <stdio.h>
 
-/*void	intersect(t_mrt *mrt, t_sphere *sp, size_t sp_id, t_ray r)
+void	intersect(t_sphere *sp, size_t sp_id, t_ray *r)
 {
-	t_point		center_sp;
-	t_vec4		sphere_to_ray;
-	float		discriminant;
+	t_vec4		sphere;
+	t_point		sp_coords;
+	float		radius;
 	float		a;
 	float		b;
 	float		c;
+	float		discriminant;
+	float		sqrt_d;
 
-	mrt.intersect->count->buffer[sp_id] = 0;
-	set_point(&center_sp, mrt->sphere.st.x->buffer[sp_id], mrt->sphere.st.y->buffer[sp_id], mrt->sphere.st.z->buffer[sp_id]);
-	sub_points(&sphere_to_ray, r.origin, center_sp);
-	a = compute_dot(r.direction, r.direction);
-	b = 2 * compute_dot(r.direction, sphere_to_ray);
-	c = compute_dot(sphere_to_ray, sphere_to_ray);
-	discriminant = b * b - 4 * a * c;
-	if (discriminant < 0)
-		return (intersect);
-	intersect.inter[0] = (-b - sqrt(discriminant)) / (2 * a);
-	intersect.inter[1] = (-b + sqrt(discriminant)) / (2 * a);
-	if (intersect.inter[0] == intersect.inter[1])
-		intersect->count->buffer[sp_id] = 1;
+	sp_coords = set_point(
+		((float *)sp->st.x->buffer)[sp_id],
+		((float *)sp->st.y->buffer)[sp_id],
+		((float *)sp->st.z->buffer)[sp_id]
+	);
+	sphere = sub_points(r->origin, sp_coords);
+	radius = ((float *)sp->st.radius->buffer)[sp_id];
+	a = compute_dot(r->direction, r->direction);
+	b = 2.0f * compute_dot(r->direction, sphere);
+	c = compute_dot(sphere, sphere) - radius * radius;
+	discriminant = b * b - 4.0f * a * c;
+	if (discriminant < 0.0f)
+	{
+		r->intersect.is_hit = 0;
+		return ;
+	}
+	sqrt_d = fsqrt(discriminant);
+	r->intersect.id = sp_id;
+	r->intersect.object.sp = sp;
+	r->intersect.t[0] = (-b - sqrt_d) / (2.0f * a);
+	r->intersect.t[1] = (-b + sqrt_d) / (2.0f * a);
+	if (r->intersect.t[0] >= 0 && r->intersect.t[1] >= 0)
+		r->intersect.is_hit = 1;
 	else
-		intersect->count->buffer[sp_id] = 2;
-	return (intersect);
-}*/
+		r->intersect.is_hit = 0;
+}

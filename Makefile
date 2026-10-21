@@ -22,6 +22,7 @@ OS					:= $(shell uname)
 HDR					:= include
 SRC					:= src
 OBJ					:= obj
+DEP					:= dep
 ASM					:= asm
 LIB					:= lib
 MAP					:= map
@@ -65,7 +66,7 @@ endif
 # --------------------- FLAGS -------------------- #
 CFLAGS			?= -Wall -Werror -Wextra
 ifeq ($(COMPILER),clang)
-	CFLAGS		= 	-Wall -Werror -Wextra -Wvla -Wpedantic -Wno-incompatible-pointer-types -Wmisleading-indentation -Wshadow -Wnull-dereference
+	CFLAGS		= 	-Wall -Werror -Wextra -Wvla -Wpedantic -Wmisleading-indentation -Wshadow -Wnull-dereference
 else ifeq ($(COMPILER),gcc)
 	CFLAGS		= 	-Wall -Werror -Wextra -Wvla -Wpedantic -Wno-incompatible-pointer-types -Wmisleading-indentation -Wshadow -Wnull-dereference -Wstringop-overflow -Warray-bounds -Wrestrict
 endif
@@ -78,7 +79,7 @@ ifeq ($(MODE),debug)
 else ifeq ($(MODE),debug_memory)
 	CFLAGS += -g -O1 -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer
 else ifeq ($(MODE),release)
-	CFLAGS += -O3 -ffast-math -march=native
+	CFLAGS += -O3 -march=native
 endif
 
 CPPFLAGS		:= -I$(HDR) -I$(LIB)/$(LIBFT)/include -I$(LIB)/$(LIBMLX)
@@ -118,6 +119,9 @@ OBJECTS			:= $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))
 # ---------------------- ASM ---------------------- #
 ASSEMBLEUR		:= $(patsubst $(SRC)/%.c, $(ASM)/%.s, $(SOURCES))
 
+# ---------------------- DEPS --------------------- #
+DEPENDENCES		:= $(patsubst $(OBJ)/%.o, $(DEP)/%.d, $(OBJECTS))
+
 # --------------------- RULES --------------------- #
 all: $(NAME)
 
@@ -132,14 +136,18 @@ $(LIBMLX_A):
 
 $(OBJ)/%.o: $(SRC)/%.c
 	$(MKDIRP) $(dir $@)
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	$(MKDIRP) $(dir $(DEP)/$*.d)
+	$(CC) $(CPPFLAGS) -MMD -MP -MF $(DEP)/$*.d -MT $@ $(CFLAGS) -c $< -o $@
 
 $(ASM)/%.s: $(SRC)/%.c
 	$(MKDIRP) $(dir $@)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -S $< -o $@
 
+-include $(DEPENDENCES)
+
 clean:
 	$(RMRF) $(OBJ)
+	$(RMRF) $(DEP)
 	@make clean -C $(LIB)/$(LIBFT)
 	@make clean -C $(LIB)/$(LIBMLX)
 

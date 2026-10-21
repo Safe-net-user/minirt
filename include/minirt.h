@@ -5,11 +5,17 @@
 #include "../src/shape/sphere.h"
 #include "../src/shape/plane.h"
 #include "../src/shape/cylinder.h"
+#include "../src/physic/light.h"
 
 typedef struct s_mrt
 {
 	void			*mlx;
 	void			*mlx_win;
+	void			*img;
+	char			*addr;
+	int				ll;
+	int				bpp;
+	int				endian;
 	t_sphere		sphere;
 	t_plane			plane;
 	t_cylinder		cylinder;
@@ -20,6 +26,5 @@ typedef struct s_mrt
 
 int		key_hook(int keycode, void *param);
 int		parser(t_mrt *mrt, char *path);
-void	free_mrt(t_mrt *mrt);
 
 #endif //MINIRT_H

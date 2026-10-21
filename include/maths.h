@@ -7,5 +7,6 @@
 # include "../src/maths/point.h"
 # include "../src/maths/vec4.h"
 # include "../src/maths/transformations.h"
+#include "../src/physic/ray.h"
 
 #endif //MATHS_H

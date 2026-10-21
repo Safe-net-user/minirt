@@ -1,6 +1,8 @@
 #ifndef SHAPES_H
 #define SHAPES_H
 
+typedef struct s_mrt t_mrt;
+
 #include "minirt.h"
 #include "../src/shape/sphere.h"
 #include "../src/shape/plane.h"

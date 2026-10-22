@@ -41,13 +41,15 @@ static inline __attribute__((always_inline)) float	compute_magnitude(const t_vec
 	return (sqrtf(v.x * v.x + v.y * v.y + v.z * v.z + v.w * v.w));
 }
 
-static inline __attribute__((always_inline)) t_vec4	normalize_vector(const t_vec4 v, const float magnitude)
+static inline __attribute__((always_inline)) t_vec4	normalize_vector(const t_vec4 v)
 {
 	float	s;
+	float	m;
 
-	if (!magnitude || magnitude == 1.0)
+	m = compute_magnitude(v);
+	if (!m || m == 1.0f)
 		return (v);
-	s = 1.0 / magnitude;
+	s = 1.0f / m;
 	return (mul_vector(v, s));
 }
 

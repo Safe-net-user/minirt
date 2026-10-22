@@ -2,7 +2,7 @@
 #define PARSER_H
 
 # include <stddef.h>
-# include "../../include/minirt.h"
+# include "minirt.h"
 
 typedef enum e_parser_return_value
 {
@@ -92,17 +92,17 @@ static inline int	parse_norm_vec3(t_parser *p, float *x, float *y, float *z)
 {
 	if (parse_float(p, x))
 		return (1);
-	if (p->str[p->index] != ',' && (*x >= -1.0 && *x <= 1.0))
+	if (p->str[p->index] != ',' || (*x < -1.0 || *x > 1.0))
 		return (1);
 	p->index++;
 	if (parse_float(p, y))
 		return (1);
-	if (p->str[p->index] != ',' && (*x >= -1.0 && *x <= 1.0))
+	if (p->str[p->index] != ',' || (*y < -1.0 || *y > 1.0))
 		return (1);
 	p->index++;
 	if (parse_float(p, z))
 		return (1);
-	if (*x < -1.0 && *x > 1.0)
+	if (*z < -1.0 || *z > 1.0)
 		return (1);
 	return (0);
 }

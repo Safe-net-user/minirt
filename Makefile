@@ -13,8 +13,9 @@ RMF					:= rm -f
 RMRF				:= rm -rf
 
 # ------------------- SHELL CMDS ------------------ #
-CC_VERSION			:= $(shell $(CC) --version)
 OS					:= $(shell uname)
+IS_CLANG			:= $(shell $(CC) -dM -E - </dev/null | grep -q '__clang__' && echo clang)
+IS_GCC				:= $(shell $(CC) -dM -E - </dev/null | grep -q '__GNUC__' && echo gcc)
 
 # ------------------- DIRECTORIES ----------------- #
 
@@ -53,10 +54,10 @@ LIBFT_A				:= $(LIB)/$(LIBFT)/$(LFT)
 LIBMLX_A			:= $(LIB)/$(LIBMLX)/$(LMLX)
 
 # ------------------- COMPILER -------------------- #
-ifeq ($(findstring clang,$(CC_VERSION)),clang)
+ifeq ($(IS_CLANG),clang)
     COMPILER := clang
 else
-ifeq ($(findstring GCC,$(CC_VERSION)),GCC)
+ifeq ($(IS_GCC),gcc)
     COMPILER := gcc
 else
     $(error Unsupported compiler. Use clang or gcc)
@@ -68,7 +69,7 @@ CFLAGS			?= -Wall -Werror -Wextra
 ifeq ($(COMPILER),clang)
 	CFLAGS		= 	-Wall -Werror -Wextra -Wvla -Wpedantic -Wmisleading-indentation -Wshadow -Wnull-dereference
 else ifeq ($(COMPILER),gcc)
-	CFLAGS		= 	-Wall -Werror -Wextra -Wvla -Wpedantic -Wno-incompatible-pointer-types -Wmisleading-indentation -Wshadow -Wnull-dereference -Wstringop-overflow -Warray-bounds -Wrestrict
+	CFLAGS		= 	-Wall -Werror -Wextra -Wvla -Wpedantic -Wmisleading-indentation -Wshadow -Wnull-dereference -Wstringop-overflow -Warray-bounds -Wrestrict
 endif
 
 ifeq ($(filter debug debug_memory release,$(MODE)),)
@@ -82,7 +83,7 @@ else ifeq ($(MODE),release)
 	CFLAGS += -O3 -march=native
 endif
 
-CPPFLAGS		:= -I$(HDR) -I$(LIB)/$(LIBFT)/include -I$(LIB)/$(LIBMLX)
+CPPFLAGS		:= -I$(HDR) -I$(SRC) -I$(LIB)/$(LIBFT)/include -I$(LIB)/$(LIBMLX)
 LDFLAGS			:= -L$(LIB)/$(LIBFT) -L$(LIB)/$(LIBMLX)
 LDLIBS			:= -lm -lft -lmlx -lXext -lX11
 
@@ -111,6 +112,7 @@ $(SRC)/$(SHAPE)/free_shape.c \
 $(SRC)/$(SHAPE)/init_shape.c \
 $(SRC)/$(SHAPE)/plane.c \
 $(SRC)/$(SHAPE)/sphere.c \
+$(SRC)/$(SHAPE)/color.c \
 $(SRC)/$(WINDOW)/window_utils.c \
 
 # -------------------- OBJECTS -------------------- #

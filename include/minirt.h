@@ -1,11 +1,18 @@
 #ifndef MINIRT_H
 #define MINIRT_H
 
-#include "types.h"
-#include "../src/shape/sphere.h"
-#include "../src/shape/plane.h"
-#include "../src/shape/cylinder.h"
-#include "../src/physic/light.h"
+#include "shape/sphere.h"
+#include "shape/plane.h"
+#include "shape/cylinder.h"
+#include "physic/light.h"
+
+typedef struct s_cam
+{
+	t_point	direction;
+	t_point	coords;
+	uint8_t	fov;
+	char	padding[7];
+}	t_cam;
 
 typedef struct s_mrt
 {
@@ -24,7 +31,6 @@ typedef struct s_mrt
 	t_light			light;
 }	t_mrt;
 
-int		key_hook(int keycode, void *param);
 int		parser(t_mrt *mrt, char *path);
 
 #endif //MINIRT_H

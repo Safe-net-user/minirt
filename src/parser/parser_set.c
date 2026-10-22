@@ -22,6 +22,7 @@ void	set_lut(t_parser_fn *lut)
 
 void	set_lut_msg(char **lut)
 {
+	lut[ERROR] = "unknown error raised";
 	lut[BAD_IDENTIFIER] = "invalid identifier";
 	lut[D_CAMERA] = "duplicate camera";
 	lut[D_LIGHT] = "duplicate light";

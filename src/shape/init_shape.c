@@ -1,4 +1,5 @@
-#include "shapes.h"
+#include <stdint.h>
+#include "shape.h"
 #include "vector.h"
 
 int	init_sphere(t_sphere *s)
@@ -7,9 +8,9 @@ int	init_sphere(t_sphere *s)
 	s->st.y = init_vector(sizeof(float), SIZE_VECTOR);
 	s->st.z = init_vector(sizeof(float), SIZE_VECTOR);
 	s->st.radius = init_vector(sizeof(float), SIZE_VECTOR);
-	s->sr.r = init_vector(sizeof(float), SIZE_VECTOR);
-	s->sr.g = init_vector(sizeof(float), SIZE_VECTOR);
-	s->sr.b = init_vector(sizeof(float), SIZE_VECTOR);
+	s->sr.r = init_vector(sizeof(uint8_t), SIZE_VECTOR);
+	s->sr.g = init_vector(sizeof(uint8_t), SIZE_VECTOR);
+	s->sr.b = init_vector(sizeof(uint8_t), SIZE_VECTOR);
 	if (!s->st.x || !s->st.y || !s->st.z || !s->st.radius || \
 !s->sr.r || !s->sr.g || !s->sr.b)
 		return (1);

@@ -1,7 +1,9 @@
 #include "core.h"
 #include "minirt.h"
 #include "mlx.h"
-#include "../physic/light.h"
+#include "physic/intersection.h"
+#include "physic/light.h"
+#include "physic/ray.h"
 
 void    my_mlx_put(t_mrt *mrt, int x, int y, int color)
 {
@@ -29,7 +31,7 @@ void	launch_ray_tracer(t_mrt *mrt)
 		while (x < WINDOW_WIDTH)
 		{
 			p = set_point(x, y, wall_z);
-			r = set_ray(ray_origin, normalize_vector(sub_points(p, ray_origin), compute_magnitude(sub_points(p, ray_origin))));
+			r = set_ray(ray_origin, normalize_vector(sub_points(p, ray_origin)));
 			intersect(&mrt->sphere, 0, &r);
 			if (r.intersect.is_hit)
 				my_mlx_put(mrt, x, y,
@@ -38,18 +40,17 @@ void	launch_ray_tracer(t_mrt *mrt)
 						mrt->amb_light,
 						mrt->light,
 						0,
-						position(r, r.intersect.t[0]),
+						position(r, r.intersect.t),
 						normal_at(
 							set_point(
 								((float *)r.intersect.object.sp->st.x->buffer)[0],
 								((float *)r.intersect.object.sp->st.y->buffer)[0],
 								((float *)r.intersect.object.sp->st.z->buffer)[0]
-								), position(r, r.intersect.t[0])),
+								), position(r, r.intersect.t)),
 						negate_vector(r.direction)));
 			x++;
 		}
 		y++;
 	}
 	mlx_put_image_to_window(mrt->mlx, mrt->mlx_win, mrt->img, 0, 0);
-
 }

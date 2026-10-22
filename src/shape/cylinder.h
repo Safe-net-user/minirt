@@ -31,6 +31,6 @@ typedef struct s_cylinder
 	t_cr	cr;
 }	t_cylinder;
 
-_Static_assert(sizeof(t_ct) == 64);
-_Static_assert(sizeof(t_cr) == 32);
+_Static_assert(sizeof(t_ct) == 64, "maximum ct struct size exceeded");
+_Static_assert(sizeof(t_cr) == 32, "maximum cr struct size exceeded");
 #endif //CYLINDER_H

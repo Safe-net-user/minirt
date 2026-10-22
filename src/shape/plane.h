@@ -30,7 +30,7 @@ typedef struct s_plane
 	t_pr	pr;
 }	t_plane;
 
-_Static_assert(sizeof(t_pt) == 64);
-_Static_assert(sizeof(t_pr) == 32);
+_Static_assert(sizeof(t_pt) == 64, "maximum pt struct size exceeded");
+_Static_assert(sizeof(t_pr) == 32, "maximum pr struct size exceeded");
 
 #endif //PLANE_H

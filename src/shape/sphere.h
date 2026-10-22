@@ -4,10 +4,8 @@
 #include <stdint.h>
 #include "vector.h"
 #include "macros.h"
-#include "../maths/vec4.h"
-#include "../maths/point.h"
-
-typedef struct s_ray t_ray;
+#include "maths/vec4.h"
+#include "maths/point.h"
 
 typedef struct s_sphere_tracer
 {
@@ -33,20 +31,15 @@ typedef struct s_sphere
 
 static inline t_vec4	normal_at(const t_point origin, const t_point p)
 {
-	t_vec4	v;
-
-	v = sub_points(origin, p);
-	return (normalize_vector(v, compute_magnitude(v)));
+	return (normalize_vector(sub_points(p, origin)));
 }
 
 static inline t_vec4	reflect_at(const t_vec4 in, const t_vec4 normal)
 {
-	return (mul_vector(mul_vector(sub_vectors(in, normal), 2), compute_dot(in, normal)));
+	return (sub_vectors(mul_vector(mul_vector(normal, 2), compute_dot(in, normal)), in));
 }
 
-void	intersect(t_sphere *sp, size_t sp_id, t_ray *r);
-
-_Static_assert(sizeof(t_st) == 32);
-_Static_assert(sizeof(t_sr) == 32);
+_Static_assert(sizeof(t_st) == 32, "maximum st struct size exceeded");
+_Static_assert(sizeof(t_sr) == 32, "maximum sr struct size exceeded");
 
 #endif //SPHERES_H

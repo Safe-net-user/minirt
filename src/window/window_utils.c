@@ -1,7 +1,7 @@
 #include "window.h"
 #include "minirt.h"
 #include "mlx.h"
-#include "shapes.h"
+#include "shape/shape.h"
 #include <stdlib.h>
 
 static void	free_mrt(t_mrt *mrt)
@@ -11,9 +11,17 @@ static void	free_mrt(t_mrt *mrt)
 	free_sphere(mrt);
 }
 
+void free_mlx(t_mrt *mrt)
+{
+	mlx_destroy_window(mrt->mlx, mrt->mlx_win);
+	mlx_destroy_display(mrt->mlx);
+	free(mrt->mlx);
+}
+
 int	free_mlx_mrt(t_mrt *mrt)
 {
 	mlx_destroy_window(mrt->mlx, mrt->mlx_win);
+	mlx_destroy_image(mrt->mlx, mrt->img);
 	mlx_destroy_display(mrt->mlx);
 	free(mrt->mlx);
 	free_mrt(mrt);

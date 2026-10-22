@@ -1,8 +1,6 @@
 #ifndef MATRIX2_H
 #define MATRIX2_H
 
-#include <immintrin.h>
-
 typedef struct s_matrix2
 {
 	float	d[4];

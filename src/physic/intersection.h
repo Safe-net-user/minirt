@@ -2,9 +2,9 @@
 #define INTERSECTION_H
 
 # include <stddef.h>
-# include "../shape/cylinder.h"
-# include "../shape/plane.h"
-# include "../shape/sphere.h"
+# include "shape/cylinder.h"
+# include "shape/plane.h"
+# include "shape/sphere.h"
 
 typedef struct s_intersect
 {
@@ -14,7 +14,7 @@ typedef struct s_intersect
 		t_cylinder	*cy;
 		t_plane		*pl;
 	} object;
-	float			t[2];
+	float			t;
 	bool			is_hit;
 }	t_intersect;
 

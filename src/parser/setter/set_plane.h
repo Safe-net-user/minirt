@@ -1,9 +1,6 @@
 #ifndef SET_PLANE_H
 #define SET_PLANE_H
 
-#include "minirt.h"
-#include "vector.h"
-
 static inline void	set_plane_coords(t_pt *pt, float x, float y, float z)
 {
 	push_back_vector(pt->x, &x);

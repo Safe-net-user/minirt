@@ -2,7 +2,6 @@
 #define SET_AMB_LIGHT_H
 
 #include "minirt.h"
-#include "types.h"
 
 static inline void	set_amb_light_color(t_mrt *mrt, int r, int g, int b)
 {

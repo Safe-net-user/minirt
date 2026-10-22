@@ -2,13 +2,10 @@
 # define SET_LIGHT_H
 
 #include "minirt.h"
-#include "types.h"
 
 static inline void	set_light_coords(t_mrt *mrt, float x, float y, float z)
 {
-	mrt->light.coords.x = x;
-	mrt->light.coords.y = y;
-	mrt->light.coords.z = z;
+	mrt->light.coords = set_point(x, y, z);
 }
 
 static inline void	set_light_ratio(t_mrt *mrt, float ratio)

@@ -1,9 +1,6 @@
 #ifndef SET_SPHERE_H
 #define SET_SPHERE_H
 
-#include "minirt.h"
-#include "vector.h"
-
 static inline void	set_sphere_coords(t_st *st, float x, float y, float z)
 {
 	push_back_vector(st->x, &x);

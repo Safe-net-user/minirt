@@ -2,7 +2,6 @@
 #define SET_CAMERA_H
 
 #include "minirt.h"
-#include "types.h"
 
 static inline void	set_camera_coords(t_mrt *mrt, float x, float y, float z)
 {

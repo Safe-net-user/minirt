@@ -1,8 +1,8 @@
 #ifndef RAY_H
 # define RAY_H
 
-#include "../maths/vec4.h"
-#include "../maths/point.h"
+#include "maths/vec4.h"
+#include "maths/point.h"
 #include "intersection.h"
 
 typedef struct s_ray
@@ -21,5 +21,6 @@ static inline __attribute__((always_inline)) t_ray	set_ray(const t_point p, cons
 }
 
 t_point	position(t_ray r, double t);
+void	intersect(t_sphere *sp, size_t sp_id, t_ray *r);
 
 #endif //RAY_H

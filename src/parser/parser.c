@@ -76,7 +76,7 @@ int parser(t_mrt *mrt, char *path)
 		}
 		if (br == 0)
 			break;
-		len += br;
+		len += (size_t)br;
 	}
 	file_bytes[len] = '\0';
 	ret = parser_fsm(mrt, (unsigned char *)file_bytes);

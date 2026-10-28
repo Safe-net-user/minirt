@@ -29,7 +29,7 @@ int	init_plane(t_plane *p)
 	p->pr.g = init_vector(sizeof(float), SIZE_VECTOR);
 	p->pr.b = init_vector(sizeof(float), SIZE_VECTOR);
 	if (!p->pt.x || !p->pt.y || !p->pt.z || \
-!p->pr.r || !p->pr.g || !p->pr.b)
+!p->pr.r || !p->pr.g || !p->pr.b || !p->pt.dx || !p->pt.dy || !p->pt.dz)
 		return (1);
 	return (0);
 }

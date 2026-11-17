@@ -1,6 +1,7 @@
 #ifndef RAY_H
 # define RAY_H
 
+#include <math.h>
 #include "maths/vec4.h"
 #include "maths/point.h"
 #include "intersection.h"
@@ -17,10 +18,14 @@ static inline __attribute__((always_inline)) t_ray	set_ray(const t_point p, cons
 	return ((t_ray){
 		.origin = p,
 		.direction = v,
+		.intersect = {
+			.is_hit = 0,
+			.t = INFINITY,
+		}
 	});
 }
 
-t_point	position(t_ray r, double t);
+t_point	position(t_ray r, float t);
 void	intersect(t_sphere *sp, size_t sp_id, t_ray *r);
 
 #endif //RAY_H

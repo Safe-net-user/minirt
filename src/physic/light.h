@@ -36,6 +36,6 @@ static inline __attribute__((always_inline)) t_rgba	compute_ambient(const t_rgba
 	return (mul_rgba_by_rgba(object_color, mul_rgba(div_rgba(set_rgba(al.r, al.g, al.b, 0.0f), 255), al.ratio)));
 }
 
-int	lighting_sphere(t_sphere *sp, const t_amb_light al, const t_light light, const size_t id, t_point point, t_vec4 v_normal, t_vec4 v_eye);
+int	lighting_sphere(t_sphere *sp, t_amb_light al, t_light light, size_t id, t_point point, t_vec4 v_normal, t_vec4 v_eye, int is_shadowed);
 
 #endif //LIGHT_H

@@ -36,7 +36,16 @@ static inline t_vec4	normal_at(const t_point origin, const t_point p)
 
 static inline t_vec4	reflect_at(const t_vec4 in, const t_vec4 normal)
 {
-	return (sub_vectors(mul_vector(mul_vector(normal, 2), compute_dot(in, normal)), in));
+	return (
+		sub_vectors(in,
+			mul_vector(
+				mul_vector(
+					normal,
+					2
+					),
+					compute_dot(in, normal)
+					)
+					));
 }
 
 _Static_assert(sizeof(t_st) == 32, "maximum st struct size exceeded");

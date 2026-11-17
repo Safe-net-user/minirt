@@ -35,7 +35,6 @@ void	launch_ray_tracer(t_mrt *mrt)
 	t_ray	r;
 	size_t	x;
 	size_t	y;
-	size_t	sp_i;
 	t_vec4	normal;
 	t_point	pos;
 
@@ -49,23 +48,17 @@ void	launch_ray_tracer(t_mrt *mrt)
 		while (x < WINDOW_WIDTH)
 		{
 			r = camera_ray(mrt->cam, x, y);
-			sp_i = 0;
-			while (sp_i < mrt->sphere.st.x->size)
+			scene_intersect(mrt, &r);
+			if (r.intersect.is_hit)
 			{
-
-				scene_intersect(mrt, &r);
-				if (r.intersect.is_hit)
-				{
-					normal = normal_at(
+				normal = normal_at(
 								set_point(
-									((float *)r.intersect.object.sp->st.x->buffer)[sp_i],
-									((float *)r.intersect.object.sp->st.y->buffer)[sp_i],
-									((float *)r.intersect.object.sp->st.z->buffer)[sp_i]),
+									((float *)r.intersect.object.sp->st.x->buffer)[r.intersect.id],
+									((float *)r.intersect.object.sp->st.y->buffer)[r.intersect.id],
+									((float *)r.intersect.object.sp->st.z->buffer)[r.intersect.id]),
 								position(r, r.intersect.t));
 					pos = position(r, r.intersect.t);
 					my_mlx_put(mrt, x, y, lighting_sphere(&mrt->sphere, mrt->amb_light, mrt->light, r.intersect.id, pos, normal, negate_vector(r.direction), is_shadowed(mrt, normal, pos)));
-				}
-				sp_i++;
 			}
 			x++;
 		}

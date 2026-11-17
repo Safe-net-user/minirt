@@ -28,6 +28,7 @@ t_p_ret	parse_camera(t_parser *p)
 	if (fov > 180)
 		return (FOV);
 	set_camera_fov(p->mrt, fov);
+	set_camera(p->mrt);
 	p->is_camera = 1;
 	return (SUCCESS);
 }

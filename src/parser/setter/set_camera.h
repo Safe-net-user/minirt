@@ -2,6 +2,22 @@
 #define SET_CAMERA_H
 
 #include "minirt.h"
+#include "macros.h"
+#include "entity/camera.h"
+
+static inline void set_camera(t_mrt *mrt)
+{
+	mrt->cam.forward = compute_forward(mrt->cam);
+	mrt->cam.right = compute_right(mrt->cam.forward);
+	mrt->cam.up = compute_up(
+		mrt->cam.forward,
+		mrt->cam.right);
+	mrt->cam.pixel_size = compute_pixel_size(
+		&mrt->cam,
+		WINDOW_WIDTH,
+		WINDOW_HEIGHT,
+		mrt->cam.fov);
+}
 
 static inline void	set_camera_coords(t_mrt *mrt, float x, float y, float z)
 {

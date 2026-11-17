@@ -5,14 +5,7 @@
 #include "shape/plane.h"
 #include "shape/cylinder.h"
 #include "physic/light.h"
-
-typedef struct s_cam
-{
-	t_point	direction;
-	t_point	coords;
-	uint8_t	fov;
-	char	padding[7];
-}	t_cam;
+#include "entity/camera.h"
 
 typedef struct s_mrt
 {
@@ -23,6 +16,8 @@ typedef struct s_mrt
 	int				ll;
 	int				bpp;
 	int				endian;
+	short			window_w;
+	short			window_h;
 	t_sphere		sphere;
 	t_plane			plane;
 	t_cylinder		cylinder;

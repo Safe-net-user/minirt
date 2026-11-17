@@ -37,7 +37,6 @@ void	intersect(t_sphere *sp, size_t sp_id, t_ray *r)
 	t[1] = (-b + sqrt_d) / (2.0f * a);
 	if (t[0] >= 0 && t[1] >= EPSILON && r->intersect.t >= t[0])
 	{
-		r->intersect.id = sp_id;
 		r->intersect.object.sp = sp;
 		r->intersect.t = t[0];
 		r->intersect.id = sp_id;
@@ -45,12 +44,9 @@ void	intersect(t_sphere *sp, size_t sp_id, t_ray *r)
 	}
 	else if (t[0] < 0 && t[1] >= EPSILON && r->intersect.t >= t[1])
 	{
-		r->intersect.id = sp_id;
 		r->intersect.object.sp = sp;
 		r->intersect.t = t[1];
 		r->intersect.id = sp_id;
 		r->intersect.is_hit = 1;
 	}
-	else
-		r->intersect.is_hit = 0;
 }

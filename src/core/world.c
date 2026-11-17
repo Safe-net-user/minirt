@@ -8,7 +8,7 @@
 #include "physic/light.h"
 #include "physic/ray.h"
 
-static t_ray intersect_world(t_mrt *mrt, t_ray r)
+static t_ray intersect_any(t_mrt *mrt, t_ray r)
 {
 	size_t sp_i;
 
@@ -35,7 +35,7 @@ int is_shadowed(t_mrt *mrt, const t_vec4 normal, const t_point p)
 	v = sub_points(mrt->light.coords, origin);
 	distance = compute_magnitude(v);
 	direction = normalize_vector(v);
-	r = intersect_world(mrt, set_ray(origin, direction));
+	r = intersect_any(mrt, set_ray(origin, direction));
 	if (r.intersect.is_hit && r.intersect.t < distance)
 		return (true);
 	return (false);

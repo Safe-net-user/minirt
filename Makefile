@@ -32,6 +32,7 @@ EXM					:= example
 
 # SOURCE SUB-DIRECTORIES
 CORE				:= core
+ENTITY				:= entity
 PARSER				:= parser
 MATHS				:= maths
 PHYSIC				:= physic
@@ -91,6 +92,8 @@ LDLIBS			:= -lm -lft -lmlx -lXext -lX11
 SOURCES			:= \
 $(SRC)/main.c \
 $(SRC)/$(CORE)/raytracer.c \
+$(SRC)/$(CORE)/world.c \
+$(SRC)/$(ENTITY)/camera.c \
 $(SRC)/$(PARSER)/parser.c \
 $(SRC)/$(PARSER)/parse_blanks.c \
 $(SRC)/$(PARSER)/parse_amb_lighting.c \
